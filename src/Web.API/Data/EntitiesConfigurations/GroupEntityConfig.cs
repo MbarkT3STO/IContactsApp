@@ -18,6 +18,6 @@ public class GroupEntityConfig : IEntityTypeConfiguration<Group>
         builder.Property(g => g.Name).IsRequired().HasMaxLength(50);
         builder.Property(g => g.Description).IsRequired().HasMaxLength(50);
 
-        builder.HasOne(g => g.User).WithMany(u => u.Groups).HasForeignKey(g => g.UserId);
+        builder.HasOne(g => g.User).WithMany(u => u.Groups).HasForeignKey(g => g.UserId).OnDelete(DeleteBehavior.NoAction);
     }
 }

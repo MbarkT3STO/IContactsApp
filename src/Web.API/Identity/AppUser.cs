@@ -11,10 +11,11 @@ public class AppUser : IdentityUser
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public string ImageUrl { get; set; }
+    public string? ImageUrl { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 
     public virtual ICollection<Contact> Contacts { get; set; }
     public virtual ICollection<Group> Groups { get; set; }
+    public virtual ICollection<AppUserRole> UserRoles { get; set; }
 }

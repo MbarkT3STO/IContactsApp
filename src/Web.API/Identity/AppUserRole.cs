@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Web.API.Identity;
 
-public class AppRole : IdentityRole
+public class AppUserRole : IdentityUserRole<string>
 {
-    public virtual ICollection<AppUserRole> UserRoles { get; set; }
+    public int Id { get; set; }
+    public AppUser User { get; set; }
+    public AppRole Role { get; set; }
 }

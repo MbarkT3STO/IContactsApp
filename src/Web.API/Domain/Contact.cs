@@ -26,6 +26,6 @@ public class Contact : IAuditable
 
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
-    public int UserId { get; set; }
+    public string UserId { get; set; }
     public AppUser User { get; set; }
 }

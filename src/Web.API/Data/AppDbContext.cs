@@ -33,7 +33,7 @@ public class AppDbContext : DbContext
 
     public DbSet<AppUser> Users { get; set; }
     public DbSet<AppRole> Roles { get; set; }
-    public DbSet<IdentityUserRole<string>> UserRoles { get; set; }
+    public DbSet<AppUserRole> UserRoles { get; set; }
 
 
     // Seed AppRoles
@@ -66,30 +66,39 @@ public class AppDbContext : DbContext
                 Id = "1",
                 UserName = "mbark",
                 NormalizedUserName = "mbark",
+                FirstName = "M'BARK",
+                LastName = "T3STO",
                 Email = "mbark@localhost.com",
                 NormalizedEmail = "MBARK@LOCALHOST.COM",
                 EmailConfirmed = true,
-                PasswordHash = hasher.HashPassword(null, "123456")
+                PasswordHash = hasher.HashPassword(null, "123456"),
+                CreatedAt = DateTime.Now
             },
             new AppUser
             {
                 Id = "2",
                 UserName = "user1",
                 NormalizedUserName = "USER1",
+                FirstName = "USER1",
+                LastName = "USER1",
                 Email = "user1@localhost.com",
                 NormalizedEmail = "USER1@LOCALHOST.COM",
                 EmailConfirmed = true,
-                PasswordHash = hasher.HashPassword(null, "123456")
+                PasswordHash = hasher.HashPassword(null, "123456"),
+                CreatedAt = DateTime.Now
             },
             new AppUser
             {
                 Id = "3",
                 UserName = "user2",
                 NormalizedUserName = "USER2",
+                FirstName = "USER2",
+                LastName = "USER2",
                 Email = "user2@localhost.com",
                 NormalizedEmail = "USER2@LOCALHOST.COM",
                 EmailConfirmed = true,
-                PasswordHash = hasher.HashPassword(null, "123456")
+                PasswordHash = hasher.HashPassword(null, "123456"),
+                CreatedAt = DateTime.Now
             }
         );
     }
@@ -97,19 +106,22 @@ public class AppDbContext : DbContext
     // Seed AppUserRoles
     private void SeedUserRoles(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<IdentityUserRole<string>>().HasData(
-            new IdentityUserRole<string>
+        modelBuilder.Entity<AppUserRole>().HasData(
+            new AppUserRole
             {
+                Id = 1,
                 UserId = "1",
                 RoleId = "1"
             },
-            new IdentityUserRole<string>
+            new AppUserRole
             {
+                Id = 2,
                 UserId = "2",
                 RoleId = "2"
             },
-            new IdentityUserRole<string>
+            new AppUserRole
             {
+                Id = 3,
                 UserId = "3",
                 RoleId = "2"
             }
