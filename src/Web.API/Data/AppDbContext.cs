@@ -37,7 +37,7 @@ public class AppDbContext : DbContext
 
 
     // Seed AppRoles
-    private void SeedRoles(ModelBuilder modelBuilder)
+    private void SeedRoles(ModelBuilder modelBuilder)  
     {
         modelBuilder.Entity<AppRole>().HasData(
             new AppRole
