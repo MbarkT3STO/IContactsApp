@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Web.API.Data;
 using Web.API.Domain;
+using Web.API.Interfaces;
 
 namespace Web.API.Features;
 
@@ -16,28 +17,35 @@ public class ContactService : IContactService
         _context = context;
     }
 
-    public Task<Contact> CreateAsync(Contact contact)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task DeleteAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task<IEnumerable<Contact>> GetAsync()
     {
-        throw new NotImplementedException();
+        var contacts = _context.Contacts.ToList();
+        return Task.FromResult(contacts.AsEnumerable());
     }
 
-    public Task<Contact> GetAsync(int id)
+    public async Task<Contact> CreateAsync(Contact contact)
     {
-        throw new NotImplementedException();
+        _context.Contacts.Add(contact);
+        await _context.SaveChangesAsync();
+
+        return contact;
     }
 
-    public Task UpdateAsync(Contact contact)
+    public async Task<Contact> GetAsync(int id)
     {
-        throw new NotImplementedException();
+        var contact = await _context.Contacts.FindAsync(id);
+        return contact;
+    }
+
+    public async Task UpdateAsync(Contact contact)
+    {
+        _context.Contacts.Update(contact);
+        await _context.SaveChangesAsync();
+    }
+    public async Task DeleteAsync(int id)
+    {
+        var contact = _context.Contacts.Find(id);
+        _context.Contacts.Remove(contact);
+        await _context.SaveChangesAsync();
     }
 }
