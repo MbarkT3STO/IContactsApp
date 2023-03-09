@@ -34,10 +34,11 @@ public class AppDbContext : DbContext
     public DbSet<AppUser> Users { get; set; }
     public DbSet<AppRole> Roles { get; set; }
     public DbSet<AppUserRole> UserRoles { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 
     // Seed AppRoles
-    private void SeedRoles(ModelBuilder modelBuilder)  
+    private void SeedRoles(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AppRole>().HasData(
             new AppRole
