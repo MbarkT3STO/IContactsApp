@@ -6,6 +6,7 @@ using AutoMapper;
 using MediatR;
 using Web.API.Data;
 using Web.API.Domain;
+using Web.API.Extensions;
 
 namespace Web.API.Features.ContactFeature.Commands.CreateContactCommand;
 
@@ -40,7 +41,7 @@ public class CreateContactCommandHandler : IRequestHandler<CreateContactCommand,
     public async Task<CreateContactCommandResult> Handle(CreateContactCommand request, CancellationToken cancellationToken)
     {
         var contact = _mapper.Map<Contact>(request);
-        contact.CreatedAt = DateTime.Now;
+        contact.WriteCreateAudit();
         _context.Contacts.Add(contact);
         await _context.SaveChangesAsync(cancellationToken);
         return new CreateContactCommandResult { CreatedContact = _mapper.Map<CreateContactCommandResultDTO>(contact) };
