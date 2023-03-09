@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using MediatR;
+using Web.API.Features.ContactFeature.Queries;
 
 namespace Web.API.Extensions;
 
@@ -11,4 +9,10 @@ public static class DIExtensions
     {
         builder.Services.AddAutoMapper(typeof(Program).Assembly);
     }
+
+    public static void AddMediatR(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddMediatR(typeof(GetContactsQuery).Assembly);
+    }
+
 }

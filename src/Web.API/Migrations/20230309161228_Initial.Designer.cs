@@ -12,7 +12,7 @@ using Web.API.Data;
 namespace Web.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230306111321_Initial")]
+    [Migration("20230309161228_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -249,8 +249,8 @@ namespace Web.API.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a204038a-6fcc-4c21-bedf-4e16ac0050e0",
-                            CreatedAt = new DateTime(2023, 3, 6, 12, 13, 21, 44, DateTimeKind.Local).AddTicks(5587),
+                            ConcurrencyStamp = "8c563be6-c17f-4439-98f8-94a1d3b9c1a9",
+                            CreatedAt = new DateTime(2023, 3, 9, 17, 12, 27, 678, DateTimeKind.Local).AddTicks(8850),
                             Email = "mbark@localhost.com",
                             EmailConfirmed = true,
                             FirstName = "M'BARK",
@@ -258,9 +258,9 @@ namespace Web.API.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "MBARK@LOCALHOST.COM",
                             NormalizedUserName = "mbark",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGmCmqRqHkYpTT36+iZZoiLDTd15nQYPE67pUnl6G8RStFIvptVYE9EiTTyjN6Payw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEM5Liz9HJPQO+DOz+Npq/hxqNvxqCiggWkhYEUCz0AfglGnZMBv0Vk/xHNOgtArrYQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "5c5a1ead-7475-4e73-adcb-19837b093004",
+                            SecurityStamp = "2ac17b2e-8b1d-45fc-bba5-4429121b54a6",
                             TwoFactorEnabled = false,
                             UserName = "mbark"
                         },
@@ -268,8 +268,8 @@ namespace Web.API.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fb128703-fc9f-4e5f-9261-63d6da3cd21e",
-                            CreatedAt = new DateTime(2023, 3, 6, 12, 13, 21, 262, DateTimeKind.Local).AddTicks(8021),
+                            ConcurrencyStamp = "5da3cbce-eac7-4e5c-86e6-0db6f059dba5",
+                            CreatedAt = new DateTime(2023, 3, 9, 17, 12, 27, 938, DateTimeKind.Local).AddTicks(2243),
                             Email = "user1@localhost.com",
                             EmailConfirmed = true,
                             FirstName = "USER1",
@@ -277,9 +277,9 @@ namespace Web.API.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER1@LOCALHOST.COM",
                             NormalizedUserName = "USER1",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMSX8aqzaZo/C9Ay6bky0DBzH1IG2aCKqLlA4kBVG/jwPabz8BDwKqKDzyBEcFViKw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELm0mpovOUuTRGeGch9X/xSzwFv5/UGtsBGCX+0bn0llJLIkgW1mc3ULhy6D/9kUAw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "3cafaccb-4741-4922-a4c8-092860e6021c",
+                            SecurityStamp = "73062ca9-38db-4c97-8266-df73f8ba409b",
                             TwoFactorEnabled = false,
                             UserName = "user1"
                         },
@@ -287,8 +287,8 @@ namespace Web.API.Migrations
                         {
                             Id = "3",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5693a312-ac00-4a3b-a339-528811d773b1",
-                            CreatedAt = new DateTime(2023, 3, 6, 12, 13, 21, 475, DateTimeKind.Local).AddTicks(9455),
+                            ConcurrencyStamp = "d576acb9-b983-4578-b924-8f214c87c2e2",
+                            CreatedAt = new DateTime(2023, 3, 9, 17, 12, 28, 239, DateTimeKind.Local).AddTicks(2015),
                             Email = "user2@localhost.com",
                             EmailConfirmed = true,
                             FirstName = "USER2",
@@ -296,9 +296,9 @@ namespace Web.API.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER2@LOCALHOST.COM",
                             NormalizedUserName = "USER2",
-                            PasswordHash = "AQAAAAIAAYagAAAAEP+Rcw5CHKEmDiMrvJ6kaBb74ytwyMMSAmM86cl5vYoHVlpnT1W0yuDb355HfRXbjQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKf62fG4KfYhqEWffBa1Y1sFU75boUVEPvA5qJtQ8IQxYjZut53tRljCURD3mID54g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "db32f314-4be9-429e-90eb-9ddf0bc58777",
+                            SecurityStamp = "e2d8fdbc-cbe5-4d8e-ade2-b5332c6458f5",
                             TwoFactorEnabled = false,
                             UserName = "user2"
                         });
@@ -347,6 +347,47 @@ namespace Web.API.Migrations
                             RoleId = "2",
                             UserId = "3"
                         });
+                });
+
+            modelBuilder.Entity("Web.API.Identity.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsExpired")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsInvalidated")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("RevokedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("Web.API.Domain.Contact", b =>
@@ -398,6 +439,17 @@ namespace Web.API.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Web.API.Identity.RefreshToken", b =>
+                {
+                    b.HasOne("Web.API.Identity.AppUser", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Web.API.Domain.Group", b =>
                 {
                     b.Navigation("Contacts");
@@ -413,6 +465,8 @@ namespace Web.API.Migrations
                     b.Navigation("Contacts");
 
                     b.Navigation("Groups");
+
+                    b.Navigation("RefreshTokens");
 
                     b.Navigation("UserRoles");
                 });

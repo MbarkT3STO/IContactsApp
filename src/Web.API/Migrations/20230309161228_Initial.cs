@@ -80,6 +80,32 @@ namespace Web.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RefreshTokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RevokedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsExpired = table.Column<bool>(type: "bit", nullable: false),
+                    IsUsed = table.Column<bool>(type: "bit", nullable: false),
+                    IsInvalidated = table.Column<bool>(type: "bit", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RefreshTokens_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserRoles",
                 columns: table => new
                 {
@@ -156,9 +182,9 @@ namespace Web.API.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedAt", "Email", "EmailConfirmed", "FirstName", "ImageUrl", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UpdatedAt", "UserName" },
                 values: new object[,]
                 {
-                    { "1", 0, "a204038a-6fcc-4c21-bedf-4e16ac0050e0", new DateTime(2023, 3, 6, 12, 13, 21, 44, DateTimeKind.Local).AddTicks(5587), "mbark@localhost.com", true, "M'BARK", null, "T3STO", false, null, "MBARK@LOCALHOST.COM", "mbark", "AQAAAAIAAYagAAAAEGmCmqRqHkYpTT36+iZZoiLDTd15nQYPE67pUnl6G8RStFIvptVYE9EiTTyjN6Payw==", null, false, "5c5a1ead-7475-4e73-adcb-19837b093004", false, null, "mbark" },
-                    { "2", 0, "fb128703-fc9f-4e5f-9261-63d6da3cd21e", new DateTime(2023, 3, 6, 12, 13, 21, 262, DateTimeKind.Local).AddTicks(8021), "user1@localhost.com", true, "USER1", null, "USER1", false, null, "USER1@LOCALHOST.COM", "USER1", "AQAAAAIAAYagAAAAEMSX8aqzaZo/C9Ay6bky0DBzH1IG2aCKqLlA4kBVG/jwPabz8BDwKqKDzyBEcFViKw==", null, false, "3cafaccb-4741-4922-a4c8-092860e6021c", false, null, "user1" },
-                    { "3", 0, "5693a312-ac00-4a3b-a339-528811d773b1", new DateTime(2023, 3, 6, 12, 13, 21, 475, DateTimeKind.Local).AddTicks(9455), "user2@localhost.com", true, "USER2", null, "USER2", false, null, "USER2@LOCALHOST.COM", "USER2", "AQAAAAIAAYagAAAAEP+Rcw5CHKEmDiMrvJ6kaBb74ytwyMMSAmM86cl5vYoHVlpnT1W0yuDb355HfRXbjQ==", null, false, "db32f314-4be9-429e-90eb-9ddf0bc58777", false, null, "user2" }
+                    { "1", 0, "8c563be6-c17f-4439-98f8-94a1d3b9c1a9", new DateTime(2023, 3, 9, 17, 12, 27, 678, DateTimeKind.Local).AddTicks(8850), "mbark@localhost.com", true, "M'BARK", null, "T3STO", false, null, "MBARK@LOCALHOST.COM", "mbark", "AQAAAAIAAYagAAAAEM5Liz9HJPQO+DOz+Npq/hxqNvxqCiggWkhYEUCz0AfglGnZMBv0Vk/xHNOgtArrYQ==", null, false, "2ac17b2e-8b1d-45fc-bba5-4429121b54a6", false, null, "mbark" },
+                    { "2", 0, "5da3cbce-eac7-4e5c-86e6-0db6f059dba5", new DateTime(2023, 3, 9, 17, 12, 27, 938, DateTimeKind.Local).AddTicks(2243), "user1@localhost.com", true, "USER1", null, "USER1", false, null, "USER1@LOCALHOST.COM", "USER1", "AQAAAAIAAYagAAAAELm0mpovOUuTRGeGch9X/xSzwFv5/UGtsBGCX+0bn0llJLIkgW1mc3ULhy6D/9kUAw==", null, false, "73062ca9-38db-4c97-8266-df73f8ba409b", false, null, "user1" },
+                    { "3", 0, "d576acb9-b983-4578-b924-8f214c87c2e2", new DateTime(2023, 3, 9, 17, 12, 28, 239, DateTimeKind.Local).AddTicks(2015), "user2@localhost.com", true, "USER2", null, "USER2", false, null, "USER2@LOCALHOST.COM", "USER2", "AQAAAAIAAYagAAAAEKf62fG4KfYhqEWffBa1Y1sFU75boUVEPvA5qJtQ8IQxYjZut53tRljCURD3mID54g==", null, false, "e2d8fdbc-cbe5-4d8e-ade2-b5332c6458f5", false, null, "user2" }
                 });
 
             migrationBuilder.InsertData(
@@ -187,6 +213,11 @@ namespace Web.API.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RefreshTokens_UserId",
+                table: "RefreshTokens",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_RoleId",
                 table: "UserRoles",
                 column: "RoleId");
@@ -202,6 +233,9 @@ namespace Web.API.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Contacts");
+
+            migrationBuilder.DropTable(
+                name: "RefreshTokens");
 
             migrationBuilder.DropTable(
                 name: "UserRoles");
