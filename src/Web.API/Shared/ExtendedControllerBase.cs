@@ -16,10 +16,10 @@ public abstract class ExtendedControllerBase : ControllerBase
         _mediator = mediator;
     }
 
-    protected async Task<ActionResult<TResponse>> Send<TResponse>(IRequest<TResponse> request)
+    protected async Task<TResponse> Send<TResponse>(IRequest<TResponse> request)
     {
         var response = await _mediator.Send(request);
 
-        return Ok(response);
+        return response;
     }
 }

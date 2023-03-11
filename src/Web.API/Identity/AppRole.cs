@@ -8,5 +8,5 @@ namespace Web.API.Identity;
 
 public class AppRole : IdentityRole
 {
-    public virtual ICollection<AppUserRole> UserRoles { get; set; }
+    public virtual ICollection<IdentityUserRole<string>> UserRoles { get; set; }
 }

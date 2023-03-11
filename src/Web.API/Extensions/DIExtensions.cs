@@ -1,3 +1,4 @@
+
 using MediatR;
 using Web.API.Features.ContactFeature.Queries;
 
@@ -12,7 +13,7 @@ public static class DIExtensions
 
     public static void AddMediatR(this WebApplicationBuilder builder)
     {
-        builder.Services.AddMediatR(typeof(GetContactsQuery).Assembly);
+        builder.Services.AddMediatR(typeof(Program).Assembly);
     }
 
 }

@@ -17,6 +17,5 @@ public class AppUser : IdentityUser
 
     public virtual ICollection<Contact> Contacts { get; set; }
     public virtual ICollection<Group> Groups { get; set; }
-    public virtual ICollection<AppUserRole> UserRoles { get; set; }
     public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
 }

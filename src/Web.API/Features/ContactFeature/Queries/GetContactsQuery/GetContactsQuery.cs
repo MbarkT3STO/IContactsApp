@@ -7,9 +7,9 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Web.API.Data;
 using Web.API.Domain;
-using static Web.API.Features.ContactFeature.Queries.GetContactsQuery;
+using static Web.API.Features.ContactFeature.Queries.GetContactsQuery.GetContactsQuery;
 
-namespace Web.API.Features.ContactFeature.Queries;
+namespace Web.API.Features.ContactFeature.Queries.GetContactsQuery;
 
 public class GetContactsQuery : IRequest<GetContactsQueryResult>
 {

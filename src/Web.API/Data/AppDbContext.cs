@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Web.API.Domain;
 using Web.API.Identity;
 
 namespace Web.API.Data;
 
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext<AppUser>
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
@@ -18,7 +19,7 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(Program).Assembly);
 
         // Seed data
         SeedRoles(modelBuilder);
@@ -33,7 +34,7 @@ public class AppDbContext : DbContext
 
     public DbSet<AppUser> Users { get; set; }
     public DbSet<AppRole> Roles { get; set; }
-    public DbSet<AppUserRole> UserRoles { get; set; }
+    // public DbSet<AppUserRole> UserRoles { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 
@@ -107,22 +108,19 @@ public class AppDbContext : DbContext
     // Seed AppUserRoles
     private void SeedUserRoles(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<AppUserRole>().HasData(
-            new AppUserRole
+        modelBuilder.Entity<IdentityUserRole<string>>().HasData(
+            new IdentityUserRole<string>
             {
-                Id = 1,
                 UserId = "1",
                 RoleId = "1"
             },
-            new AppUserRole
+            new IdentityUserRole<string>
             {
-                Id = 2,
                 UserId = "2",
                 RoleId = "2"
             },
-            new AppUserRole
+            new IdentityUserRole<string>
             {
-                Id = 3,
                 UserId = "3",
                 RoleId = "2"
             }
