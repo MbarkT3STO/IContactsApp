@@ -19,12 +19,12 @@ public class BaseCommandResult<TResult> : ICommandResult<TResult>
     public string? ErrorMessage { get; }
 
 
-    protected BaseCommandResult(TResult? value)
+    public BaseCommandResult(TResult? value)
     {
         Value = value;
     }
 
-    protected BaseCommandResult(TResult? value, bool isSucceeded = true, Exception? exception = null, string? errorMessage = null)
+    public BaseCommandResult(TResult? value, bool isSucceeded = true, Exception? exception = null, string? errorMessage = null)
     {
         Value = value;
         IsSucceeded = isSucceeded;
@@ -32,14 +32,14 @@ public class BaseCommandResult<TResult> : ICommandResult<TResult>
         ErrorMessage = errorMessage;
     }
 
-    protected BaseCommandResult(Exception? exception, string? errorMessage)
+    public BaseCommandResult(Exception? exception, string? errorMessage)
     {
         IsSucceeded = false;
         Exception = exception;
         ErrorMessage = errorMessage;
     }
 
-    protected BaseCommandResult(Exception? exception)
+    public BaseCommandResult(Exception? exception)
     {
         IsSucceeded = false;
         Exception = exception;
