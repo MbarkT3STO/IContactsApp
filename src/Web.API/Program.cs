@@ -12,6 +12,10 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(buil
 builder.AddAutoMapper();
 builder.AddMediatR();
 
+builder.AddCustomOptions();
+
+builder.AddIdentity();
+builder.AddAuthentication();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

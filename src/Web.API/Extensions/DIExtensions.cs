@@ -1,6 +1,11 @@
 
+using System.Text;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Web.API.Features.ContactFeature.Queries;
+using Web.API.Identity;
+using Web.API.Options;
 
 namespace Web.API.Extensions;
 
@@ -16,4 +21,43 @@ public static class DIExtensions
         builder.Services.AddMediatR(typeof(Program).Assembly);
     }
 
+    public static void AddCustomOptions(this WebApplicationBuilder builder)
+    {
+        builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JwtOptions"));
+    }
+
+    public static void AddIdentity(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddIdentity<AppUser, AppRole>(options =>
+        {
+            options.Password.RequireDigit = false;
+            options.Password.RequiredLength = 6;
+            options.Password.RequireLowercase = false;
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireUppercase = false;
+        }).AddEntityFrameworkStores<AppDbContext>();
+    }
+
+    public static void AddAuthentication(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(jwt =>
+        {
+            jwt.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ClockSkew = TimeSpan.Zero,
+                ValidIssuer = builder.Configuration["JwtOptions:Issuer"],
+                ValidAudience = builder.Configuration["JwtOptions:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtOptions:Key"]))
+            };
+        });
+    }
 }
+

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.API.Features.GroupFeature.Commands.Create;
 using Web.API.Features.GroupFeature.Queries.GetGroupByIdQuery;
@@ -18,6 +19,7 @@ public class GroupsController : ExtendedControllerBase
     {
     }
 
+    [Authorize]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GetGroupsQueryResultDTO>>> Get()
     {
@@ -26,6 +28,8 @@ public class GroupsController : ExtendedControllerBase
         return Ok(result.Value);
     }
 
+
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<ActionResult<GetGroupByIdQueryResultDTO>> Get(int id)
     {
@@ -39,6 +43,7 @@ public class GroupsController : ExtendedControllerBase
         return NotFound(result);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<CreateGroupCommandResultDTO>> Post(CreateGroupCommand command)
     {
