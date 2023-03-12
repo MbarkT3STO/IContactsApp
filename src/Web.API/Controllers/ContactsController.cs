@@ -1,6 +1,7 @@
 
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Web.API.Features.ContactFeature.Commands.CreateContactCommand;
 using Web.API.Features.ContactFeature.Queries.GetContactByIdQuery;
 using Web.API.Features.ContactFeature.Queries.GetContactsQuery;
 using Web.API.Shared;
@@ -24,10 +25,18 @@ public class ContactsController : ExtendedControllerBase
         return Ok(contacts.Contacts);
     }
 
-    [HttpGet]
-    public async Task<ActionResult<GetContactByIdQueryResultDTO>> GetById(int id)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<GetContactByIdQueryResultDTO>> Get(int id)
     {
         var result = await Send(new GetContactByIdQuery(id));
+
+        return Ok(result.Value);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<CreateContactCommandResultDTO>> Create(CreateContactCommand command)
+    {
+        var result = await Send(command);
 
         return Ok(result.Value);
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
+using Web.API.Abstraction;
 using Web.API.Data;
 using Web.API.Domain;
 using Web.API.Extensions;
@@ -27,23 +28,33 @@ public record CreateContactCommand : IRequest<CreateContactCommandResult>
     public string UserId { get; set; }
 }
 
-public class CreateContactCommandHandler : IRequestHandler<CreateContactCommand, CreateContactCommandResult>
+public class CreateContactCommandHandler : BaseCommandHandler, IRequestHandler<CreateContactCommand, CreateContactCommandResult>
 {
-    private readonly AppDbContext _context;
-    private readonly IMapper _mapper;
-
-    public CreateContactCommandHandler(AppDbContext context, IMapper mapper)
+    public CreateContactCommandHandler(AppDbContext context, IMapper mapper) : base(context, mapper)
     {
-        _context = context;
-        _mapper = mapper;
     }
 
     public async Task<CreateContactCommandResult> Handle(CreateContactCommand request, CancellationToken cancellationToken)
     {
-        var contact = _mapper.Map<Contact>(request);
-        contact.WriteCreateAudit();
-        _context.Contacts.Add(contact);
-        await _context.SaveChangesAsync(cancellationToken);
-        return new CreateContactCommandResult { CreatedContact = _mapper.Map<CreateContactCommandResultDTO>(contact) };
+        try
+        {
+            var contact = _mapper.Map<Contact>(request);
+
+            contact.WriteCreateAudit();
+
+            _context.Contacts.Add(contact);
+            await _context.SaveChangesAsync(cancellationToken);
+
+            var dto = _mapper.Map<CreateContactCommandResultDTO>(contact);
+
+            var result = new CreateContactCommandResult(dto);
+
+            return result;
+        }
+        catch (Exception ex)
+        {
+            return new CreateContactCommandResult(ex);
+        }
+
     }
 }
