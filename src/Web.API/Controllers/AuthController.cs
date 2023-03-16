@@ -10,8 +10,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Web.API.Features.AuthFeature.Commands.CreateRefreshToken;
+using Web.API.Features.AuthFeature.Queries.GetRefreshTokenQuery;
 using Web.API.Identity;
 using Web.API.Models.Identity.Login;
+using Web.API.Models.Identity.RefreshToken;
 using Web.API.Options;
 using Web.API.Shared;
 
@@ -62,6 +64,30 @@ public class AuthController : ExtendedControllerBase
             return BadRequest(new LoginResponseModel(false, "Invalid username or password"));
         }
     }
+
+
+    [HttpPost("RefreshToken")]
+    public async Task<ActionResult<LoginResponseModel>> RefreshToken([FromBody] RefreshTokenModel model)
+    {
+        var user = await _userManager.FindByIdAsync(model.UserId);
+
+        if (user == null)
+            return BadRequest(new RefreshTokenResponseModel("Invalid User"));
+
+        var queryResult = await Send(new GetRefreshTokenQuery(model.RefreshToken, model.UserId));
+
+        if (queryResult.IsSucceeded)
+        {
+            var jwt = GenerateJwtToken(user);
+
+            return Ok(new RefreshTokenResponseModel(jwt.Token, model.RefreshToken, jwt.CreatedAt, jwt.ExpiresAt));
+        }
+        else
+        {
+            return BadRequest(new RefreshTokenResponseModel("Invalid Refresh Token"));
+        }
+    }
+
 
     #region Private Methods
 
