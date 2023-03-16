@@ -25,10 +25,7 @@
             "tsConfig": "tsconfig.app.json",
             "allowedCommonJsDependencies": ["oidc-client"],
             "assets": ["src/assets"],
-            "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/styles.css"
-            ],
+            "styles": ["src/styles.css"],
             "scripts": []
           },
           "configurations": {
