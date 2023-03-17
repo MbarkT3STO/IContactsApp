@@ -67,7 +67,7 @@ public class AuthController : ExtendedControllerBase
 
 
     [HttpPost("RefreshToken")]
-    public async Task<ActionResult<LoginResponseModel>> RefreshToken([FromBody] RefreshTokenModel model)
+    public async Task<ActionResult<RefreshTokenResponseModel>> RefreshToken([FromBody] RefreshTokenModel model)
     {
         var user = await _userManager.FindByIdAsync(model.UserId);
 
