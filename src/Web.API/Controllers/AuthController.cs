@@ -34,7 +34,7 @@ public class AuthController : ExtendedControllerBase
         _jwtOptions = jwtOptions;
     }
 
-    [HttpPost("login")]
+    [HttpPost("Login")]
     public async Task<ActionResult<LoginResponseModel>> Login([FromBody] LoginModel model)
     {
         var user = await _userManager.FindByNameAsync(model.Username);

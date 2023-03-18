@@ -10,6 +10,8 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { UserDashboardComponent } from './User-Dashboard/User-Dashboard.component';
+import { LoginComponent } from './Auth/Login/Login.component';
+import { AuthService } from './Services/Auth/Auth.service';
 
 @NgModule({
   declarations: [
@@ -19,19 +21,25 @@ import { UserDashboardComponent } from './User-Dashboard/User-Dashboard.componen
     CounterComponent,
     FetchDataComponent,
     UserDashboardComponent,
+    LoginComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
+      // { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
+
+      { path: '', component: LoginComponent, pathMatch: 'full' },
+      { path: 'Login', component: LoginComponent },
+
       { path: 'User-Dashboard', component: UserDashboardComponent },
     ]),
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
