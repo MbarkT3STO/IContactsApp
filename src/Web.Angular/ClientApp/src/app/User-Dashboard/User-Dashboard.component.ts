@@ -28,7 +28,6 @@ export class UserDashboardComponent implements OnInit {
   setAppUser() {
     this.identity.GetUserByUserName().subscribe((result) => {
       this.appUser = result;
-      alert(this.appUser.fullName);
     });
   }
 }

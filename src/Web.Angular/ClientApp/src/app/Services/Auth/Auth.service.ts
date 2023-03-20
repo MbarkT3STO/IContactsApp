@@ -66,4 +66,16 @@ export class AuthService {
 
     this.router.navigate(['/Login']);
   }
+
+  IsTokenValid() {
+    const token = localStorage.getItem('token');
+    var isValid:boolean = false;
+
+    if (token == null)
+     isValid = false;
+    else
+      this.http.post<boolean>(`${this.apiUrl}/api/Auth/IsTokenValid?token=${token}`, null).subscribe(result => {isValid = result} );
+    
+    return isValid;
+  }
 }
