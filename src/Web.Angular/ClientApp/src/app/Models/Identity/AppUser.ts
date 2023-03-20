@@ -14,5 +14,5 @@ export class AppUser {
   accessFailedCount: number = 0;
   firstName: string = '';
   lastName: string = '';
-  fullName: string = this.firstName + ' ' + this.lastName;
+  get fullName():string{return `${this.firstName} ${this.lastName}`}
 }

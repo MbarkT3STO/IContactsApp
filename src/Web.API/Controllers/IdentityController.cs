@@ -27,7 +27,7 @@ public class IdentityController : ExtendedControllerBase
     }
 
     [HttpPost("GetUserById")]
-    public async Task<ActionResult<AppUser>> GetUserById(string id)
+    public async Task<ActionResult<AppUser>> GetUserById([FromQuery] string id)
     {
         var user = await _userManager.FindByIdAsync(id);
 
@@ -38,7 +38,7 @@ public class IdentityController : ExtendedControllerBase
     }
 
     [HttpPost("GetUserByName")]
-    public async Task<ActionResult<AppUser>> GetUserByName(string name)
+    public async Task<ActionResult<AppUser>> GetUserByName([FromQuery] string name)
     {
         var user = await _userManager.FindByNameAsync(name);
 
@@ -49,7 +49,7 @@ public class IdentityController : ExtendedControllerBase
     }
 
     [HttpPost("GetUserRoles")]
-    public async Task<ActionResult<List<string>>> GetUserRoles(string id)
+    public async Task<ActionResult<List<string>>> GetUserRoles([FromQuery] string id)
     {
         var user = await _userManager.FindByIdAsync(id);
 
