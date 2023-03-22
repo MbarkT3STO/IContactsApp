@@ -21,4 +21,11 @@ export class RefreshTokenResponseModel {
     this.expiresAt = expiresAt;
     this.refreshToken = refreshToken;
   }
+
+  SetToLocalStorage() {
+    localStorage.setItem('token', this.token);
+    localStorage.setItem('createdAt', this.createdAt);
+    localStorage.setItem('expiresAt', this.expiresAt);
+    localStorage.setItem('refreshToken', this.refreshToken);
+  }
 }

@@ -36,7 +36,11 @@ export class AuthService {
   }
 
   CheckUser() {
-    if (this.IsLoggedIn()) {
+
+    const isLoggedIn = this.IsLoggedIn();
+    var isTokenValid = this.IsTokenFromLocalStorageValid();
+
+    if ( isLoggedIn && isTokenValid) {
       const userId = localStorage.getItem('userId');
 
       this.identity.IsUserInRole(userId!, 'User').subscribe(
@@ -51,7 +55,24 @@ export class AuthService {
           this.router.navigate(['/Login']);
         }
       );
+    } else if (isLoggedIn && !isTokenValid) {
+
+      var refreshToken = localStorage.getItem('refreshToken')!;
+      var userId = localStorage.getItem('userId')!;
+
+      var request = new RefreshTokenModel(refreshToken, userId);
+
+      this.RefreshToken(request).subscribe( (result) => {
+        if (result.isSucceeded) {
+          result.SetToLocalStorage();
+          this.CheckUser();
+        } else {
+          this.ResetLocalStorageAuthData();
+          this.router.navigate(['/Login']);
+        }
+      });
     } else {
+      this.ResetLocalStorageAuthData();
       this.router.navigate(['/Login']);
     }
   }
@@ -67,28 +88,47 @@ export class AuthService {
     this.router.navigate(['/Login']);
   }
 
+  IsTokenValid(token: string) {
+    var isValid: boolean = false;
 
-  IsTokenValid(token:string) {
-    var isValid:boolean = false;
-
-    if (token == null)
-     isValid = false;
+    if (token == null) isValid = false;
     else
-      this.http.post<boolean>(`${this.apiUrl}/api/Auth/IsTokenValid?token=${token}`, null).subscribe(result => {isValid = result} );
+      this.http
+        .post<boolean>(
+          `${this.apiUrl}/api/Auth/IsTokenValid?token=${token}`,
+          null
+        )
+        .subscribe((result) => {
+          isValid = result;
+        });
 
     return isValid;
   }
 
   IsTokenFromLocalStorageValid() {
     var token = localStorage.getItem('token');
-    var isValid:boolean = false;
+    var isValid: boolean = false;
 
-    if (token == null)
-      isValid = false;
-      else
-        this.http.post<boolean>(`${this.apiUrl}/api/Auth/IsTokenValid?token=${token}`, null).subscribe(result => {isValid = result} );
+    if (token == null) isValid = false;
+    else
+      this.http
+        .post<boolean>(
+          `${this.apiUrl}/api/Auth/IsTokenValid?token=${token}`,
+          null
+        )
+        .subscribe((result) => {
+          isValid = result;
+        });
 
     return isValid;
   }
 
+  ResetLocalStorageAuthData() {
+    localStorage.removeItem('userId');
+    localStorage.removeItem('username');
+    localStorage.removeItem('token');
+    localStorage.removeItem('createdAt');
+    localStorage.removeItem('expiresAt');
+    localStorage.removeItem('refreshToken');
+  }
 }
