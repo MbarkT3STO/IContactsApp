@@ -31,51 +31,62 @@ export class AuthService {
     );
   }
 
-  IsLoggedIn() {
-    return localStorage.getItem('token') != null;
+  IsLoggedIn(): boolean {
+    const token = localStorage.getItem('token');
+
+    if (token == null || token == '') return false;
+    else return true;
   }
 
-  CheckUser() {
+   async CheckUser() {
 
     const isLoggedIn = this.IsLoggedIn();
-    var isTokenValid = this.IsTokenFromLocalStorageValid();
+    var isTokenValid = await this.IsTokenFromLocalStorageValid();
 
-    if ( isLoggedIn && isTokenValid) {
+    if ( isLoggedIn && isTokenValid) 
+    {
       const userId = localStorage.getItem('userId');
 
-      this.identity.IsUserInRole(userId!, 'User').subscribe(
-        (result) => {
-          if (result == true) {
-            this.router.navigate(['/User-Dashboard']);
-          } else {
-            this.router.navigate(['/Admin-Dashboard']);
-          }
-        },
-        (error) => {
-          this.router.navigate(['/Login']);
-        }
-      );
-    } else if (isLoggedIn && !isTokenValid) {
+     var isUserInAdminRule = await this.identity.IsUserInRole(userId!, 'admin').toPromise();
+
+      if (isUserInAdminRule) 
+      {
+        this.router.navigate(['/Admin-Dashboard']);
+      } 
+      else 
+      {
+        this.router.navigate(['/User-Dashboard']);
+      }
+
+    }
+    else if (isLoggedIn && !isTokenValid)
+    {
 
       var refreshToken = localStorage.getItem('refreshToken')!;
       var userId = localStorage.getItem('userId')!;
 
       var request = new RefreshTokenModel(refreshToken, userId);
 
-      this.RefreshToken(request).subscribe( (result) => {
-        if (result.isSucceeded) {
-          result.SetToLocalStorage();
-          this.CheckUser();
-        } else {
-          this.ResetLocalStorageAuthData();
-          this.router.navigate(['/Login']);
-        }
-      });
-    } else {
+      var refreshTokenResponse = await this.RefreshToken(request).toPromise();
+
+      if (refreshTokenResponse && refreshTokenResponse.isSucceeded)
+       {
+        refreshTokenResponse.SetToLocalStorage();
+        await this.CheckUser();
+       }
+       else
+       {
+        this.ResetLocalStorageAuthData();
+        this.router.navigate(['/Login']);
+       }
+    }
+    else
+    {
       this.ResetLocalStorageAuthData();
       this.router.navigate(['/Login']);
     }
   }
+
 
   Logout() {
     localStorage.removeItem('userId');
@@ -105,20 +116,14 @@ export class AuthService {
     return isValid;
   }
 
-  IsTokenFromLocalStorageValid() {
+ async IsTokenFromLocalStorageValid()
+  {
     var token = localStorage.getItem('token');
     var isValid: boolean = false;
 
     if (token == null) isValid = false;
     else
-      this.http
-        .post<boolean>(
-          `${this.apiUrl}/api/Auth/IsTokenValid?token=${token}`,
-          null
-        )
-        .subscribe((result) => {
-          isValid = result;
-        });
+     isValid = await this.http.post<boolean>(`${this.apiUrl}/api/Auth/IsTokenValid?token=${token}`, null).toPromise() as boolean;
 
     return isValid;
   }
