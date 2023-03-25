@@ -43,19 +43,19 @@ export class AuthService {
     const isLoggedIn = this.IsLoggedIn();
     var isTokenValid = await this.IsTokenFromLocalStorageValid();
 
-    if ( isLoggedIn && isTokenValid) 
+    if ( isLoggedIn && isTokenValid)
     {
       const userId = localStorage.getItem('userId');
 
      var isUserInAdminRule = await this.identity.IsUserInRole(userId!, 'admin').toPromise();
 
-      if (isUserInAdminRule) 
+      if (isUserInAdminRule)
       {
-        this.router.navigate(['/Admin-Dashboard']);
-      } 
-      else 
+       await this.router.navigateByUrl('/Admin-Dashboard');
+      }
+      else
       {
-        this.router.navigate(['/User-Dashboard']);
+        await this.router.navigateByUrl('/User-Dashboard');
       }
 
     }

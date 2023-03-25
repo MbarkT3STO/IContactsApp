@@ -10,12 +10,7 @@ export class GroupService {
 
   constructor(private http: HttpClient) {}
 
-  GetGroups() {
-    // Send the JWT token in the Authorization header
-    const headers = new HttpHeaders({
-      Authorization: 'Bearer ' + localStorage.getItem('token'),
-    });
-
+  GetGroups(){
     return this.http.get<GetGroupsQueryResultDTO[]>(this.apiUrl);
   }
 }
