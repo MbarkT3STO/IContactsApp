@@ -17,7 +17,8 @@ import { IdentityService } from './Services/Identity/Identity.service';
 import { GroupService } from './Services/Group/Group.service';
 import { AuthInterceptor } from './Interceptors/AuthInterceptor';
 
-import { GetGroupsComponent } from './User/Group/get-Groups/get-Groups.component';
+import { GetContactsComponent } from './User/get-Contacts/get-Contacts.component';
+import { CreateContactComponent } from './User/create-Contact/create-Contact.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { GetGroupsComponent } from './User/Group/get-Groups/get-Groups.component
     LoginComponent,
     HomeComponent,
     CheckUserComponent,
-    GetGroupsComponent,
+    GetContactsComponent,
+    CreateContactComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -48,7 +50,8 @@ import { GetGroupsComponent } from './User/Group/get-Groups/get-Groups.component
 
       { path: 'User-Dashboard', component: UserDashboardComponent },
 
-      { path: 'User/Group/Get-Groups', component: GetGroupsComponent },
+      { path: 'User/Contact/Get-Contacts', component: GetContactsComponent },
+      { path: 'User/Contact/Create-Contact', component: CreateContactComponent },
     ]),
   ],
   providers: [
