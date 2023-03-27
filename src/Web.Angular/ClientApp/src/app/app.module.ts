@@ -20,6 +20,11 @@ import { AuthInterceptor } from './Interceptors/AuthInterceptor';
 import { GetContactsComponent } from './User/get-Contacts/get-Contacts.component';
 import { CreateContactComponent } from './User/create-Contact/create-Contact.component';
 
+import { UserHeaderComponent } from './User/user-Header/user-Header.component';
+import { UserLayoutComponent } from './User/user-Layout/user-Layout.component';
+import { UserFooterComponent } from './User/user-Footer/user-Footer.component';
+import { UserSideBarComponent } from './User/user-Side-Bar/user-Side-Bar.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,6 +38,10 @@ import { CreateContactComponent } from './User/create-Contact/create-Contact.com
     CheckUserComponent,
     GetContactsComponent,
     CreateContactComponent,
+    UserHeaderComponent,
+    UserLayoutComponent,
+    UserFooterComponent,
+    UserSideBarComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -46,12 +55,16 @@ import { CreateContactComponent } from './User/create-Contact/create-Contact.com
       { path: '', component: LoginComponent, pathMatch: 'full' },
       { path: 'Login', component: LoginComponent },
 
-      { path: 'Check-User', component: CheckUserComponent },
+      // { path: 'Check-User', component: CheckUserComponent },
 
       { path: 'User-Dashboard', component: UserDashboardComponent },
 
-      { path: 'User/Contact/Get-Contacts', component: GetContactsComponent },
+      // { path: 'User/Contact/Get-Contacts', component: GetContactsComponent },
+      { path: 'User/Contact/Get-Contacts', component: UserLayoutComponent, children: [ {path: '', component: GetContactsComponent} ] },
       { path: 'User/Contact/Create-Contact', component: CreateContactComponent },
+
+      // { path: 'User-Dashboard' , component: UserLayoutComponent, children: [ {path: '', component: UserDashboardComponent} ]}
+      
     ]),
   ],
   providers: [
