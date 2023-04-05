@@ -43,6 +43,10 @@ export class AuthService {
     const isLoggedIn = this.IsLoggedIn();
     var isTokenValid = await this.IsTokenFromLocalStorageValid();
 
+    // print to console
+    alert('isLoggedIn: ' + isLoggedIn);
+    alert('isTokenValid: ' + isTokenValid);
+
     if ( isLoggedIn && isTokenValid)
     {
       const userId = localStorage.getItem('userId');

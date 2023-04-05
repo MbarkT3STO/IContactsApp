@@ -25,7 +25,8 @@
       },
       "sourceFileMap": {
         "/Views": "${workspaceFolder}/Views"
-      }
+      },
+
     },
     {
       "name": "Frontend (Angular)",
