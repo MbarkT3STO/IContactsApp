@@ -38,34 +38,27 @@ export class AuthService {
     else return true;
   }
 
-   async CheckUser() {
-
+  async CheckUser() {
     const isLoggedIn = this.IsLoggedIn();
     var isTokenValid = await this.IsTokenFromLocalStorageValid();
 
     // print to console
-    alert('isLoggedIn: ' + isLoggedIn);
-    alert('isTokenValid: ' + isTokenValid);
+    // alert('isLoggedIn: ' + isLoggedIn);
+    // alert('isTokenValid: ' + isTokenValid);
 
-    if ( isLoggedIn && isTokenValid)
-    {
+    if (isLoggedIn && isTokenValid) {
       const userId = localStorage.getItem('userId');
 
-     var isUserInAdminRule = await this.identity.IsUserInRole(userId!, 'admin').toPromise();
+      var isUserInAdminRule = await this.identity
+        .IsUserInRole(userId!, 'admin')
+        .toPromise();
 
-      if (isUserInAdminRule)
-      {
-       await this.router.navigateByUrl('/Admin-Dashboard');
-      }
-      else
-      {
+      if (isUserInAdminRule) {
+        await this.router.navigateByUrl('/Admin-Dashboard');
+      } else {
         await this.router.navigateByUrl('/User-Dashboard');
       }
-
-    }
-    else if (isLoggedIn && !isTokenValid)
-    {
-
+    } else if (isLoggedIn && !isTokenValid) {
       var refreshToken = localStorage.getItem('refreshToken')!;
       var userId = localStorage.getItem('userId')!;
 
@@ -73,16 +66,33 @@ export class AuthService {
 
       var refreshTokenResponse = await this.RefreshToken(request).toPromise();
 
+      alert('IsSucceeded: ' +refreshTokenResponse?.isSucceeded +'\n new Token: ' +refreshTokenResponse?.token +'\n Expires at:' +refreshTokenResponse?.expiresAt); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
       if (refreshTokenResponse && refreshTokenResponse.isSucceeded)
-       {
+      {
+        alert('Refresh token succeeded'); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
         refreshTokenResponse.SetToLocalStorage();
-        await this.CheckUser();
-       }
-       else
-       {
+
+        const userId = localStorage.getItem('userId');
+
+        var isUserInAdminRule = await this.identity.IsUserInRole(userId!, 'admin').toPromise();
+
+        if (isUserInAdminRule)
+        {
+          await this.router.navigateByUrl('/Admin-Dashboard');
+        } else
+        {
+          await this.router.navigateByUrl('/User-Dashboard');
+        }
+      }
+      else
+      {
+        alert('Refresh token failed'); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
         this.ResetLocalStorageAuthData();
         this.router.navigate(['/Login']);
-       }
+      }
     }
     else
     {
@@ -90,7 +100,6 @@ export class AuthService {
       this.router.navigate(['/Login']);
     }
   }
-
 
   Logout() {
     localStorage.removeItem('userId');
@@ -120,14 +129,18 @@ export class AuthService {
     return isValid;
   }
 
- async IsTokenFromLocalStorageValid()
-  {
+  async IsTokenFromLocalStorageValid() {
     var token = localStorage.getItem('token');
     var isValid: boolean = false;
 
     if (token == null) isValid = false;
     else
-     isValid = await this.http.post<boolean>(`${this.apiUrl}/api/Auth/IsTokenValid?token=${token}`, null).toPromise() as boolean;
+      isValid = (await this.http
+        .post<boolean>(
+          `${this.apiUrl}/api/Auth/IsTokenValid?token=${token}`,
+          null
+        )
+        .toPromise()) as boolean;
 
     return isValid;
   }
