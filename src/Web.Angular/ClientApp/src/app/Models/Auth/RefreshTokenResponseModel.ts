@@ -27,5 +27,7 @@ export class RefreshTokenResponseModel {
     localStorage.setItem('createdAt', this.createdAt);
     localStorage.setItem('expiresAt', this.expiresAt);
     localStorage.setItem('refreshToken', this.refreshToken);
+
+    alert(`token: ${this?.token} \n createdAt: ${this?.createdAt} \n expiresAt: ${this?.expiresAt} \n refreshToken: ${this?.refreshToken}`);
   }
 }

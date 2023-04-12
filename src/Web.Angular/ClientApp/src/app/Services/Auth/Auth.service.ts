@@ -72,7 +72,7 @@ export class AuthService {
       {
         alert('Refresh token succeeded'); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-        refreshTokenResponse.SetToLocalStorage();
+        refreshTokenResponse.SetToLocalStorage(); // <<<<<<<<<<<<<<<<<<<<<<<<<<<< Issue here, looks like this method is not called
 
         const userId = localStorage.getItem('userId');
 
