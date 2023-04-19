@@ -74,6 +74,13 @@ export class AuthService {
 
         refreshTokenResponse.SetToLocalStorage(); // <<<<<<<<<<<<<<<<<<<<<<<<<<<< Issue here, looks like this method is not called
 
+        window.localStorage.setItem('token', refreshTokenResponse.token);
+        window.localStorage.setItem('createdAt', refreshTokenResponse.createdAt);
+        window.localStorage.setItem('expiresAt', refreshTokenResponse.expiresAt);
+        window.localStorage.setItem('refreshToken', refreshTokenResponse.refreshToken);
+
+        localStorage.put('refreshToken', refreshTokenResponse.refreshToken);
+
         const userId = localStorage.getItem('userId');
 
         var isUserInAdminRule = await this.identity.IsUserInRole(userId!, 'admin').toPromise();
