@@ -24,6 +24,7 @@ import { UserHeaderComponent } from './User/user-Header/user-Header.component';
 import { UserLayoutComponent } from './User/user-Layout/user-Layout.component';
 import { UserFooterComponent } from './User/user-Footer/user-Footer.component';
 import { UserSideBarComponent } from './User/user-Side-Bar/user-Side-Bar.component';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -64,13 +65,14 @@ import { UserSideBarComponent } from './User/user-Side-Bar/user-Side-Bar.compone
       { path: 'User/Contact/Create-Contact', component: CreateContactComponent },
 
       // { path: 'User-Dashboard' , component: UserLayoutComponent, children: [ {path: '', component: UserDashboardComponent} ]}
-      
+
     ]),
   ],
   providers: [
     AuthService,
     IdentityService,
     GroupService,
+    CookieService,
 
     {
       provide: HTTP_INTERCEPTORS,

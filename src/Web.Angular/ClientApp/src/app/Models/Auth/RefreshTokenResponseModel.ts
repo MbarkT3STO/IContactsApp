@@ -1,3 +1,5 @@
+import { CookieService } from "ngx-cookie-service";
+
 export class RefreshTokenResponseModel {
   isSucceeded: boolean = false;
   message: string = '';
@@ -12,7 +14,8 @@ export class RefreshTokenResponseModel {
     token: string,
     createdAt: string,
     expiresAt: string,
-    refreshToken: string
+    refreshToken: string,
+    private cookieService: CookieService
   ) {
     this.isSucceeded = isSucceeded;
     this.message = message;
@@ -30,4 +33,12 @@ export class RefreshTokenResponseModel {
 
     alert(`token: ${this?.token} \n createdAt: ${this?.createdAt} \n expiresAt: ${this?.expiresAt} \n refreshToken: ${this?.refreshToken}`);
   }
+
+  SetToCookie() {
+    this.cookieService.set('token', this.token);
+    this.cookieService.set('createdAt', this.createdAt);
+    this.cookieService.set('expiresAt', this.expiresAt);
+    this.cookieService.set('refreshToken', this.refreshToken);
+  }
+
 }

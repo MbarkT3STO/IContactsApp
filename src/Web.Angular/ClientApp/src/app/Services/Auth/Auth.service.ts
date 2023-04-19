@@ -6,6 +6,7 @@ import { RefreshTokenModel } from '../../Models/Auth/RefreshTokenModel';
 import { RefreshTokenResponseModel } from 'src/app/Models/Auth/RefreshTokenResponseModel';
 import { Router } from '@angular/router';
 import { IdentityService } from '../Identity/Identity.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +15,8 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private identity: IdentityService
+    private identity: IdentityService,
+    private cookieService:CookieService
   ) {}
 
   Login(model: LoginModel) {
@@ -32,7 +34,7 @@ export class AuthService {
   }
 
   IsLoggedIn(): boolean {
-    const token = localStorage.getItem('token');
+    const token = this.cookieService.get('token');
 
     if (token == null || token == '') return false;
     else return true;
@@ -40,7 +42,7 @@ export class AuthService {
 
   async CheckUser() {
     const isLoggedIn = this.IsLoggedIn();
-    var isTokenValid = await this.IsTokenFromLocalStorageValid();
+    var isTokenValid = await this.IsTokenFromCookiesValid();
 
     // print to console
     // alert('isLoggedIn: ' + isLoggedIn);
@@ -59,8 +61,8 @@ export class AuthService {
         await this.router.navigateByUrl('/User-Dashboard');
       }
     } else if (isLoggedIn && !isTokenValid) {
-      var refreshToken = localStorage.getItem('refreshToken')!;
-      var userId = localStorage.getItem('userId')!;
+      var refreshToken = this.cookieService.get('refreshToken');
+      var userId = this.cookieService.get('userId');
 
       var request = new RefreshTokenModel(refreshToken, userId);
 
@@ -72,16 +74,9 @@ export class AuthService {
       {
         alert('Refresh token succeeded'); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-        refreshTokenResponse.SetToLocalStorage(); // <<<<<<<<<<<<<<<<<<<<<<<<<<<< Issue here, looks like this method is not called
+        refreshTokenResponse.SetToCookie(); // <<<<<<<<<<<<<<<<<<<<<<<<<<<< Issue here, looks like this method is not called
 
-        window.localStorage.setItem('token', refreshTokenResponse.token);
-        window.localStorage.setItem('createdAt', refreshTokenResponse.createdAt);
-        window.localStorage.setItem('expiresAt', refreshTokenResponse.expiresAt);
-        window.localStorage.setItem('refreshToken', refreshTokenResponse.refreshToken);
-
-        localStorage.put('refreshToken', refreshTokenResponse.refreshToken);
-
-        const userId = localStorage.getItem('userId');
+        const userId = this.cookieService.get('userId');
 
         var isUserInAdminRule = await this.identity.IsUserInRole(userId!, 'admin').toPromise();
 
@@ -97,24 +92,19 @@ export class AuthService {
       {
         alert('Refresh token failed'); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-        this.ResetLocalStorageAuthData();
+        this.ResetCookiesAuthData();
         this.router.navigate(['/Login']);
       }
     }
     else
     {
-      this.ResetLocalStorageAuthData();
+      this.ResetCookiesAuthData();
       this.router.navigate(['/Login']);
     }
   }
 
   Logout() {
-    localStorage.removeItem('userId');
-    localStorage.removeItem('username');
-    localStorage.removeItem('token');
-    localStorage.removeItem('createdAt');
-    localStorage.removeItem('expiresAt');
-    localStorage.removeItem('refreshToken');
+    this.ResetCookiesAuthData();
 
     this.router.navigate(['/Login']);
   }
@@ -152,6 +142,22 @@ export class AuthService {
     return isValid;
   }
 
+  async IsTokenFromCookiesValid() {
+    var token = this.cookieService.get('token');
+    var isValid: boolean = false;
+
+    if (token == null) isValid = false;
+    else
+      isValid = (await this.http
+        .post<boolean>(
+          `${this.apiUrl}/api/Auth/IsTokenValid?token=${token}`,
+          null
+        )
+        .toPromise()) as boolean;
+
+    return isValid;
+  }
+
   ResetLocalStorageAuthData() {
     localStorage.removeItem('userId');
     localStorage.removeItem('username');
@@ -159,5 +165,14 @@ export class AuthService {
     localStorage.removeItem('createdAt');
     localStorage.removeItem('expiresAt');
     localStorage.removeItem('refreshToken');
+  }
+
+  ResetCookiesAuthData() {
+    this.cookieService.delete('userId');
+    this.cookieService.delete('username');
+    this.cookieService.delete('token');
+    this.cookieService.delete('createdAt');
+    this.cookieService.delete('expiresAt');
+    this.cookieService.delete('refreshToken');
   }
 }
