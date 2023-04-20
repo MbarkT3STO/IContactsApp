@@ -3,6 +3,7 @@ import { LoginModel } from '../../Models/Auth/loginModel';
 import { Router } from '@angular/router';
 import { AuthService } from '../../Services/Auth/Auth.service';
 import { IdentityService } from '../../Services/Identity/Identity.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-Login',
@@ -15,7 +16,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private auth: AuthService,
-    private identity: IdentityService
+    private identity: IdentityService,
+    private cookieService:CookieService
   ) {}
 
   ngOnInit() {
@@ -28,12 +30,13 @@ export class LoginComponent implements OnInit {
     this.auth.Login(this.model).subscribe(
       (response) => {
         if (response.isSucceeded) {
-          localStorage.setItem('userId', response.userId);
-          localStorage.setItem('username', response.username);
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('createdAt', response.createdAt);
-          localStorage.setItem('expiresAt', response.expiresAt);
-          localStorage.setItem('refreshToken', response.refreshToken);
+
+          this.cookieService.set('userId', response.userId);
+          this.cookieService.set('username', response.username);
+          this.cookieService.set('token', response.token);
+          this.cookieService.set('createdAt', response.createdAt);
+          this.cookieService.set('expiresAt', response.expiresAt);
+          this.cookieService.set('refreshToken', response.refreshToken);
 
           this.router.navigate(['/User-Dashboard']);
         }

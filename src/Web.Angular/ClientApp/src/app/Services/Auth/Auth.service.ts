@@ -49,7 +49,7 @@ export class AuthService {
     // alert('isTokenValid: ' + isTokenValid);
 
     if (isLoggedIn && isTokenValid) {
-      const userId = localStorage.getItem('userId');
+      const userId = this.cookieService.get('userId');
 
       var isUserInAdminRule = await this.identity
         .IsUserInRole(userId!, 'admin')
