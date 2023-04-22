@@ -21,8 +21,11 @@ export class UserDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.auth.CheckUser();
-    this.setAppUser();
+    async () => {
+      alert('From User-Dashboard')
+      await this.auth.CheckUser();
+      this.setAppUser();
+    };
   }
 
   setAppUser() {

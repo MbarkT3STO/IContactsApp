@@ -25,6 +25,7 @@ import { UserLayoutComponent } from './User/user-Layout/user-Layout.component';
 import { UserFooterComponent } from './User/user-Footer/user-Footer.component';
 import { UserSideBarComponent } from './User/user-Side-Bar/user-Side-Bar.component';
 import { CookieService } from 'ngx-cookie-service';
+import { AuthGuard } from './Guards/Auth-Guard.service';
 
 @NgModule({
   declarations: [
@@ -58,10 +59,10 @@ import { CookieService } from 'ngx-cookie-service';
 
       // { path: 'Check-User', component: CheckUserComponent },
 
-      { path: 'User-Dashboard', component: UserDashboardComponent },
+      { path: 'User-Dashboard', component: UserDashboardComponent, canActivate: [AuthGuard] },
 
       // { path: 'User/Contact/Get-Contacts', component: GetContactsComponent },
-      { path: 'User/Contact/Get-Contacts', component: UserLayoutComponent, children: [ {path: '', component: GetContactsComponent} ] },
+      { path: 'User/Contact/Get-Contacts', component: UserLayoutComponent, canActivate: [AuthGuard], children: [ {path: '', component: GetContactsComponent} ] },
       { path: 'User/Contact/Create-Contact', component: CreateContactComponent },
 
       // { path: 'User-Dashboard' , component: UserLayoutComponent, children: [ {path: '', component: UserDashboardComponent} ]}

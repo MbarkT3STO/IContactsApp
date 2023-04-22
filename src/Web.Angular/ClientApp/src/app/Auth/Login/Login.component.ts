@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../Services/Auth/Auth.service';
 import { IdentityService } from '../../Services/Identity/Identity.service';
 import { CookieService } from 'ngx-cookie-service';
+import { async } from '@angular/core/testing';
+import { LoginResponseModel } from 'src/app/Models/Auth/LoginResponseModel';
 
 @Component({
   selector: 'app-Login',
@@ -17,28 +19,30 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private auth: AuthService,
     private identity: IdentityService,
-    private cookieService:CookieService
+    private cookieService: CookieService
   ) {}
 
   ngOnInit() {
     if (this.auth.IsLoggedIn()) {
-      this.auth.CheckUser();
+      async () => await this.auth.RedirectToDashboard();
     }
   }
 
-  login() {
+  async login() {
     this.auth.Login(this.model).subscribe(
-      (response) => {
+      async (response) => {
         if (response.isSucceeded) {
 
-          this.cookieService.set('userId', response.userId);
-          this.cookieService.set('username', response.username);
-          this.cookieService.set('token', response.token);
-          this.cookieService.set('createdAt', response.createdAt);
-          this.cookieService.set('expiresAt', response.expiresAt);
-          this.cookieService.set('refreshToken', response.refreshToken);
+          response.setToCookies();
 
-          this.router.navigate(['/User-Dashboard']);
+          var isUserInAdminRule = await this.identity.IsUserInRole(response.userId, 'admin').toPromise();
+
+          if (isUserInAdminRule) {
+            await this.router.navigate(['/Admin-Dashboard']);
+          } else {
+            alert('/User-Dashboard');
+            await this.router.navigate(['/User-Dashboard']);
+          }
         }
       },
       (error) => {

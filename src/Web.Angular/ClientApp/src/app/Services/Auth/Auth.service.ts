@@ -7,6 +7,7 @@ import { RefreshTokenResponseModel } from 'src/app/Models/Auth/RefreshTokenRespo
 import { Router } from '@angular/router';
 import { IdentityService } from '../Identity/Identity.service';
 import { CookieService } from 'ngx-cookie-service';
+import { Observable, tap } from 'rxjs';
 
 @Injectable()
 export class AuthService {
@@ -40,9 +41,31 @@ export class AuthService {
     else return true;
   }
 
+  async RedirectToDashboard(){
+
+    alert('From RedirectToDashboard');
+
+    const userId = this.cookieService.get('userId');
+
+    var isUserInAdminRule = await this.identity.IsUserInRole(userId!, 'admin').toPromise();
+
+    if (isUserInAdminRule)
+    {
+      alert('/Admin-Dashboard')
+      await this.router.navigate(['/Admin-Dashboard']);
+    }
+    else
+    {
+      alert('/User-Dashboard')
+      await this.router.navigate(['/User-Dashboard']);
+    }
+  }
+
   async CheckUser() {
     const isLoggedIn = this.IsLoggedIn();
     var isTokenValid = await this.IsTokenFromCookiesValid();
+
+    alert('From CheckUser');
 
     // print to console
     // alert('isLoggedIn: ' + isLoggedIn);
@@ -51,9 +74,7 @@ export class AuthService {
     if (isLoggedIn && isTokenValid) {
       const userId = this.cookieService.get('userId');
 
-      var isUserInAdminRule = await this.identity
-        .IsUserInRole(userId!, 'admin')
-        .toPromise();
+      var isUserInAdminRule = await this.identity.IsUserInRole(userId!, 'admin').toPromise();
 
       if (isUserInAdminRule) {
         await this.router.navigateByUrl('/Admin-Dashboard');
@@ -76,6 +97,12 @@ export class AuthService {
 
         refreshTokenResponse.SetToCookie(); // <<<<<<<<<<<<<<<<<<<<<<<<<<<< Issue here, looks like this method is not called
 
+        this.cookieService.set('token', refreshTokenResponse.token);
+        this.cookieService.set('createdAt', refreshTokenResponse.createdAt);
+        this.cookieService.set('expiresAt', refreshTokenResponse.expiresAt);
+        this.cookieService.set('refreshToken', refreshTokenResponse.refreshToken);
+
+
         const userId = this.cookieService.get('userId');
 
         var isUserInAdminRule = await this.identity.IsUserInRole(userId!, 'admin').toPromise();
@@ -93,13 +120,13 @@ export class AuthService {
         alert('Refresh token failed'); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
         this.ResetCookiesAuthData();
-        this.router.navigate(['/Login']);
+        await this.router.navigate(['/Login']);
       }
     }
     else
     {
       this.ResetCookiesAuthData();
-      this.router.navigate(['/Login']);
+     await this.router.navigate(['/Login']);
     }
   }
 
@@ -107,6 +134,61 @@ export class AuthService {
     this.ResetCookiesAuthData();
 
     this.router.navigate(['/Login']);
+  }
+
+  isLoggedIn(): boolean {
+    var isLoggedIn = this.cookieService.get('isLoggedIn');
+
+    if (isLoggedIn == null || isLoggedIn == '' || isLoggedIn == 'false')
+      return false;
+    else return true;
+  }
+
+
+  isAuthenticated(): boolean {
+    var token = this.cookieService.get('token');
+    var expiresAt = this.cookieService.get('expiresAt');
+
+    if (token == null || expiresAt == null) return false;
+    else return true;
+  }
+
+  isTokenExpired(): boolean {
+    var token = this.cookieService.get('token');
+    var expiresAt = this.cookieService.get('expiresAt');
+
+    if (token == null || expiresAt == null) return true;
+
+    var expiresAtDate = new Date(expiresAt);
+    var now = new Date();
+
+    if (expiresAtDate < now) return true;
+    else return false;
+  }
+
+  refreshToken(): Observable<RefreshTokenResponseModel> {
+    const refreshToken = this.cookieService.get('refreshToken'); // get the refresh token cookies
+    var userId = this.cookieService.get('userId');
+
+    var request = new RefreshTokenModel(refreshToken, userId);
+
+    // send a POST request to the server to refresh the token
+    return this.http.post<RefreshTokenResponseModel>(this.apiUrl+'/api/Auth/RefreshToken', { request }).pipe(
+      tap((response: any) => {
+        if (response.success) {
+          this.cookieService.set('token', response.token); // set the new token
+          this.cookieService.set('createdAt', response.createdAt); // set the new token creation time
+          this.cookieService.set('expiresAt', response.expiresAt); // set the new token expiration time
+          this.cookieService.set('refreshToken', response.refreshToken); // set the new refresh token
+        } else {
+          // if the refresh token is invalid, remove it from cookies
+          this.cookieService.delete('token');
+          this.cookieService.delete('createdAt');
+          this.cookieService.delete('expiresAt');
+          this.cookieService.delete('refreshToken');
+        }
+      })
+    );
   }
 
   IsTokenValid(token: string) {

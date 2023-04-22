@@ -15,7 +15,7 @@ export class RefreshTokenResponseModel {
     createdAt: string,
     expiresAt: string,
     refreshToken: string,
-    // private cookieService: CookieService
+    private cookieService: CookieService
   ) {
     this.isSucceeded = isSucceeded;
     this.message = message;
@@ -35,10 +35,10 @@ export class RefreshTokenResponseModel {
   }
 
   SetToCookie() {
-    // this.cookieService.set('token', this.token);
-    // this.cookieService.set('createdAt', this.createdAt);
-    // this.cookieService.set('expiresAt', this.expiresAt);
-    // this.cookieService.set('refreshToken', this.refreshToken);
+    this.cookieService.set('token', this.token);
+    this.cookieService.set('createdAt', this.createdAt);
+    this.cookieService.set('expiresAt', this.expiresAt);
+    this.cookieService.set('refreshToken', this.refreshToken);
   }
 
 }
