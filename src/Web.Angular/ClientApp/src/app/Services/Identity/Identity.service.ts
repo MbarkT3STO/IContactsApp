@@ -22,9 +22,9 @@ export class IdentityService {
   GetUserByUserName(userName?: string): Observable<AppUser> {
     if (userName) {
       return this.http.post<AppUser>(`${this.apiUrl}/GetUserByName?name=${userName}`,null);
-    } 
+    }
     else {
-      const storedUserName = this.cookieService.get('username');
+      const storedUserName = localStorage.getItem('username');
       return this.http.post<AppUser>(`${this.apiUrl}/GetUserByName?name=${storedUserName}`,null);
     }
   }

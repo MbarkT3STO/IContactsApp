@@ -27,6 +27,12 @@ import { UserSideBarComponent } from './User/user-Side-Bar/user-Side-Bar.compone
 import { CookieService } from 'ngx-cookie-service';
 import { AuthGuard } from './Guards/Auth-Guard.service';
 
+import { JwtModule } from '@auth0/angular-jwt';
+
+export function tokenGetter() {
+  return localStorage.getItem('token');
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,6 +55,12 @@ import { AuthGuard } from './Guards/Auth-Guard.service';
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: ["localhost:44462"],
+        disallowedRoutes: [] }
+    }),
     RouterModule.forRoot([
       // { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
@@ -61,8 +73,8 @@ import { AuthGuard } from './Guards/Auth-Guard.service';
 
       { path: 'User-Dashboard', component: UserDashboardComponent, canActivate: [AuthGuard] },
 
-      // { path: 'User/Contact/Get-Contacts', component: GetContactsComponent },
-      { path: 'User/Contact/Get-Contacts', component: UserLayoutComponent, canActivate: [AuthGuard], children: [ {path: '', component: GetContactsComponent} ] },
+      { path: 'User/Contact/Get-Contacts', component: GetContactsComponent, canActivate: [AuthGuard] },
+      // { path: 'User/Contact/Get-Contacts', component: UserLayoutComponent, canActivate: [AuthGuard], children: [ {path: '', component: GetContactsComponent, canActivate: [AuthGuard]} ] },
       { path: 'User/Contact/Create-Contact', component: CreateContactComponent },
 
       // { path: 'User-Dashboard' , component: UserLayoutComponent, children: [ {path: '', component: UserDashboardComponent} ]}

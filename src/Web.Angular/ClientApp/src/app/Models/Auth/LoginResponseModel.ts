@@ -31,6 +31,17 @@ export class LoginResponseModel {
     this.refreshToken = refreshToken;
   }
 
+  setToLocalStorage(){
+
+    localStorage.setItem('userId', this.userId);
+    localStorage.setItem('username', this.username);
+
+    localStorage.setItem('token', this.token);
+    localStorage.setItem('createdAt', this.createdAt);
+    localStorage.setItem('expiresAt', this.expiresAt);
+    localStorage.setItem('refreshToken', this.refreshToken);
+  }
+
   setToCookies(){
 
     this.cookieService.set('userId', this.userId);

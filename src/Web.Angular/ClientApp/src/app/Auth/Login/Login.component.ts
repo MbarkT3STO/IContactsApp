@@ -33,14 +33,22 @@ export class LoginComponent implements OnInit {
       async (response) => {
         if (response.isSucceeded) {
 
-          response.setToCookies();
+          localStorage.setItem('userId', response.userId);
+          localStorage.setItem('username', response.username);
+
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('createdAt', response.createdAt);
+          localStorage.setItem('expiresAt', response.expiresAt);
+          localStorage.setItem('refreshToken', response.refreshToken);
+
+
 
           var isUserInAdminRule = await this.identity.IsUserInRole(response.userId, 'admin').toPromise();
 
           if (isUserInAdminRule) {
             await this.router.navigate(['/Admin-Dashboard']);
           } else {
-            alert('/User-Dashboard');
+
             await this.router.navigate(['/User-Dashboard']);
           }
         }

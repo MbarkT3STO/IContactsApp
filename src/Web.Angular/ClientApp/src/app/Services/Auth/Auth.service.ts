@@ -35,7 +35,7 @@ export class AuthService {
   }
 
   IsLoggedIn(): boolean {
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
 
     if (token == null || token == '') return false;
     else return true;
@@ -45,7 +45,7 @@ export class AuthService {
 
     alert('From RedirectToDashboard');
 
-    const userId = this.cookieService.get('userId');
+    const userId = localStorage.getItem('userId');
 
     var isUserInAdminRule = await this.identity.IsUserInRole(userId!, 'admin').toPromise();
 
