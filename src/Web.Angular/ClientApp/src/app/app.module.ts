@@ -73,9 +73,17 @@ export function tokenGetter() {
 
       { path: 'User-Dashboard', component: UserDashboardComponent, canActivate: [AuthGuard] },
 
-      { path: 'User/Contact/Get-Contacts', component: GetContactsComponent, canActivate: [AuthGuard] },
-      // { path: 'User/Contact/Get-Contacts', component: UserLayoutComponent, canActivate: [AuthGuard], children: [ {path: '', component: GetContactsComponent, canActivate: [AuthGuard]} ] },
-      { path: 'User/Contact/Create-Contact', component: CreateContactComponent },
+      // { path: 'User/Contact/Get-Contacts', component: GetContactsComponent, canActivate: [AuthGuard] },
+      // { path: 'User/Contact/Get-Contacts', component: UserLayoutComponent, canActivate: [AuthGuard], children: [ {path: '', component: GetContactsComponent, canActivate: [AuthGuard]}] },
+      // { path: 'User/Contact/Create-Contact', component: UserLayoutComponent, canActivate: [AuthGuard], children: [ {path: '', component: CreateContactComponent, canActivate: [AuthGuard]}] },
+
+      // One layout for multiple components
+      {path: '', component: UserLayoutComponent, canActivate: [AuthGuard],
+      children: [
+        {path: 'User/Contact/Get-Contacts', component: GetContactsComponent, canActivate: [AuthGuard]},
+        {path: 'User/Contact/Create-Contact', component: CreateContactComponent, canActivate: [AuthGuard]}
+        ]},
+
 
       // { path: 'User-Dashboard' , component: UserLayoutComponent, children: [ {path: '', component: UserDashboardComponent} ]}
 

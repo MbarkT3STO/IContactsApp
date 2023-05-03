@@ -19,7 +19,7 @@ export class AuthInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     // Add Authorization header to the request
-    const token = this.cookieService.get('token');
+    const token = localStorage.getItem('token');
     if (token) {
       req = req.clone({
         setHeaders: {

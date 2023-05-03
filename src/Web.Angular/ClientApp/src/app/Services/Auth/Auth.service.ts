@@ -43,7 +43,6 @@ export class AuthService {
 
   async RedirectToDashboard(){
 
-    alert('From RedirectToDashboard');
 
     const userId = localStorage.getItem('userId');
 
@@ -51,12 +50,10 @@ export class AuthService {
 
     if (isUserInAdminRule)
     {
-      alert('/Admin-Dashboard')
       await this.router.navigate(['/Admin-Dashboard']);
     }
     else
     {
-      alert('/User-Dashboard')
       await this.router.navigate(['/User-Dashboard']);
     }
   }
@@ -64,8 +61,6 @@ export class AuthService {
   async CheckUser() {
     const isLoggedIn = this.IsLoggedIn();
     var isTokenValid = await this.IsTokenFromCookiesValid();
-
-    alert('From CheckUser');
 
     // print to console
     // alert('isLoggedIn: ' + isLoggedIn);
@@ -89,11 +84,9 @@ export class AuthService {
 
       var refreshTokenResponse = await this.RefreshToken(request).toPromise();
 
-      alert('IsSucceeded: ' +refreshTokenResponse?.isSucceeded +'\n new Token: ' +refreshTokenResponse?.token +'\n Expires at:' +refreshTokenResponse?.expiresAt); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
       if (refreshTokenResponse && refreshTokenResponse.isSucceeded)
       {
-        alert('Refresh token succeeded'); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
         refreshTokenResponse.SetToCookie(); // <<<<<<<<<<<<<<<<<<<<<<<<<<<< Issue here, looks like this method is not called
 
@@ -117,7 +110,6 @@ export class AuthService {
       }
       else
       {
-        alert('Refresh token failed'); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
         this.ResetCookiesAuthData();
         await this.router.navigate(['/Login']);
@@ -131,7 +123,7 @@ export class AuthService {
   }
 
   Logout() {
-    this.ResetCookiesAuthData();
+    this.ResetLocalStorageAuthData();
 
     this.router.navigate(['/Login']);
   }
@@ -166,26 +158,32 @@ export class AuthService {
     else return false;
   }
 
+  /** Refresh the token if it is expired */
   refreshToken(): Observable<RefreshTokenResponseModel> {
-    const refreshToken = this.cookieService.get('refreshToken'); // get the refresh token cookies
-    var userId = this.cookieService.get('userId');
+    const refreshToken = localStorage.getItem('refreshToken');
+    var userId = localStorage.getItem('userId');
 
-    var request = new RefreshTokenModel(refreshToken, userId);
+    if (refreshToken == null || userId == null)
+    {
+      return new Observable<RefreshTokenResponseModel>(observer => {
+        observer.next(new RefreshTokenResponseModel(false, '', '', '', '', '',this.cookieService));
+        observer.complete();
+      });
+    }
+
+
+    var request = new RefreshTokenModel(refreshToken!, userId!);
 
     // send a POST request to the server to refresh the token
-    return this.http.post<RefreshTokenResponseModel>(this.apiUrl+'/api/Auth/RefreshToken', { request }).pipe(
-      tap((response: any) => {
-        if (response.success) {
-          this.cookieService.set('token', response.token); // set the new token
-          this.cookieService.set('createdAt', response.createdAt); // set the new token creation time
-          this.cookieService.set('expiresAt', response.expiresAt); // set the new token expiration time
-          this.cookieService.set('refreshToken', response.refreshToken); // set the new refresh token
+    return this.http.post<RefreshTokenResponseModel>(this.apiUrl+'/api/Auth/RefreshToken',  request ).pipe(
+      tap((response: RefreshTokenResponseModel) => {
+        if (response.isSucceeded) {
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('createdAt', response.createdAt);
+          localStorage.setItem('expiresAt', response.expiresAt);
+          localStorage.setItem('refreshToken', response.refreshToken);
         } else {
-          // if the refresh token is invalid, remove it from cookies
-          this.cookieService.delete('token');
-          this.cookieService.delete('createdAt');
-          this.cookieService.delete('expiresAt');
-          this.cookieService.delete('refreshToken');
+          this.ResetLocalStorageAuthData();
         }
       })
     );

@@ -26,15 +26,29 @@ export class AuthGuard implements CanActivate {
     private jwtService: JwtHelperService
   ) {}
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const token = localStorage.getItem('token');
 
+    // alert('From GUARD 1');
+
     if (token && !this.jwtService.isTokenExpired(token)) {
+      // alert('From GUARD : token is not expired');
       return true;
-    } else {
-      this.router.navigate(['/login']);
+    }
+
+    var refreshTokenRequest = await this.authService.refreshToken().toPromise();
+
+    // alert('Is refresh token succeeded : ' + refreshTokenRequest?.isSucceeded);
+
+    if (!refreshTokenRequest?.isSucceeded) {
+      // alert('From GUARD : token is expired and refresh token is not succeeded');
+      this.authService.ResetLocalStorageAuthData();
+      this.router.navigate(['login']);
       return false;
     }
+
+    // alert('From GUARD : token is expired and refresh token is succeeded');
+    return refreshTokenRequest?.isSucceeded;
   }
 
   // async canActivate():Promise<boolean> {
