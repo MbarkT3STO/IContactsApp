@@ -6,10 +6,9 @@ import { GroupService } from 'src/app/Services/Group/Group.service';
 @Component({
   selector: 'app-get-Contacts',
   templateUrl: './get-Contacts.component.html',
-  styleUrls: ['./get-Contacts.component.css']
+  styleUrls: ['./get-Contacts.component.css'],
 })
 export class GetContactsComponent implements OnInit {
-
   public groups: GetGroupsQueryResultDTO[] = [];
   public createGroupRequest = new CreateGroupRequestDTO();
 
@@ -25,8 +24,21 @@ export class GetContactsComponent implements OnInit {
   }
 
   async createGroup() {
-    await this.groupService.Create(this.createGroupRequest).toPromise();
-    await this.setGroups();
+    this.createGroupRequest.description = '-';
+    this.createGroupRequest.userId = localStorage.getItem('userId')!;
+
+    this.groupService.Create(this.createGroupRequest).subscribe(
+      async (result) => {
+        await this.setGroups();
+        this.createGroupRequest.name = '';
+      },
+      (error) => {
+        alert('Error happened');
+      }
+    );
   }
 
+  // createGroup(){
+  //   alert(this.createGroupRequest.name);
+  // }
 }

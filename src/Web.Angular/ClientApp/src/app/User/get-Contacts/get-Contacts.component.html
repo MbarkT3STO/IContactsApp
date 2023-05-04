@@ -101,8 +101,10 @@
                           class="form-control form-control-solid"
                           placeholder="Group name"
 
+                          [(ngModel)]="createGroupRequest.name"
+
                         />
-                        <button type="button" class="btn btn-icon btn-light">
+                        <button type="button" class="btn btn-icon btn-light" (click)="createGroup()">
                           <!--begin::Svg Icon | path: icons/duotune/general/gen035.svg-->
                           <span class="svg-icon svg-icon-2">
                             <svg
