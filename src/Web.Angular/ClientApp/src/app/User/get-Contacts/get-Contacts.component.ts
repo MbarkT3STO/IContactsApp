@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CreateGroupRequestDTO } from 'src/app/DTOs/Group/CreateGroupRequestDTO';
 import { GetGroupsQueryResultDTO } from 'src/app/DTOs/Group/GetGroupsQueryResultDTO';
 import { GroupService } from 'src/app/Services/Group/Group.service';
+import { BaseCommandResult } from 'src/app/Shared/CQRS/BaseCommandResult';
+import { Exception } from 'src/app/Shared/Exceptions/Exception';
 
 @Component({
   selector: 'app-get-Contacts',
@@ -32,8 +34,8 @@ export class GetContactsComponent implements OnInit {
         await this.setGroups();
         this.createGroupRequest.name = '';
       },
-      (error) => {
-        alert('Error happened');
+      (exception: Exception ) => {
+        alert(exception.message);
       }
     );
   }

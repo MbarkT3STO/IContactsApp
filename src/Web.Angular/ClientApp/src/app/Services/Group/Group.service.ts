@@ -28,5 +28,5 @@ export class GroupService {
 
     return this.http.post<CreateGroupResponseDTO>(this.apiUrl, request);
   }
-  
+
 }
