@@ -1,6 +1,7 @@
 
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Web.API.Exceptions;
 using Web.API.Features.ContactFeature.Commands.CreateContactCommand;
 using Web.API.Features.ContactFeature.Queries.GetContactByIdQuery;
 using Web.API.Features.ContactFeature.Queries.GetContactsQuery;
@@ -34,9 +35,12 @@ public class ContactsController : ExtendedControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<CreateContactCommandResultDTO>> Create(CreateContactCommand command)
+    public async Task<ActionResult<CreateContactCommandResultDTO>> Post(CreateContactCommand command)
     {
         var result = await Send(command);
+
+        if (result.Exception is RecordAlreadyExistException)
+            return Conflict(result.Exception.Message);
 
         return Ok(result.Value);
     }

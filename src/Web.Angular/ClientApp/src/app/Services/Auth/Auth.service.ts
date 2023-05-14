@@ -17,7 +17,7 @@ export class AuthService {
     private http: HttpClient,
     private router: Router,
     private identity: IdentityService,
-    private cookieService:CookieService
+    private cookieService: CookieService
   ) {}
 
   Login(model: LoginModel) {
@@ -41,19 +41,16 @@ export class AuthService {
     else return true;
   }
 
-  async RedirectToDashboard(){
-
-
+  async RedirectToDashboard() {
     const userId = localStorage.getItem('userId');
 
-    var isUserInAdminRule = await this.identity.IsUserInRole(userId!, 'admin').toPromise();
+    var isUserInAdminRule = await this.identity
+      .IsUserInRole(userId!, 'admin')
+      .toPromise();
 
-    if (isUserInAdminRule)
-    {
+    if (isUserInAdminRule) {
       await this.router.navigate(['/Admin-Dashboard']);
-    }
-    else
-    {
+    } else {
       await this.router.navigate(['/User-Dashboard']);
     }
   }
@@ -69,7 +66,9 @@ export class AuthService {
     if (isLoggedIn && isTokenValid) {
       const userId = this.cookieService.get('userId');
 
-      var isUserInAdminRule = await this.identity.IsUserInRole(userId!, 'admin').toPromise();
+      var isUserInAdminRule = await this.identity
+        .IsUserInRole(userId!, 'admin')
+        .toPromise();
 
       if (isUserInAdminRule) {
         await this.router.navigateByUrl('/Admin-Dashboard');
@@ -84,41 +83,35 @@ export class AuthService {
 
       var refreshTokenResponse = await this.RefreshToken(request).toPromise();
 
-
-      if (refreshTokenResponse && refreshTokenResponse.isSucceeded)
-      {
-
+      if (refreshTokenResponse && refreshTokenResponse.isSucceeded) {
         refreshTokenResponse.SetToCookie(); // <<<<<<<<<<<<<<<<<<<<<<<<<<<< Issue here, looks like this method is not called
 
         this.cookieService.set('token', refreshTokenResponse.token);
         this.cookieService.set('createdAt', refreshTokenResponse.createdAt);
         this.cookieService.set('expiresAt', refreshTokenResponse.expiresAt);
-        this.cookieService.set('refreshToken', refreshTokenResponse.refreshToken);
-
+        this.cookieService.set(
+          'refreshToken',
+          refreshTokenResponse.refreshToken
+        );
 
         const userId = this.cookieService.get('userId');
 
-        var isUserInAdminRule = await this.identity.IsUserInRole(userId!, 'admin').toPromise();
+        var isUserInAdminRule = await this.identity
+          .IsUserInRole(userId!, 'admin')
+          .toPromise();
 
-        if (isUserInAdminRule)
-        {
+        if (isUserInAdminRule) {
           await this.router.navigateByUrl('/Admin-Dashboard');
-        } else
-        {
+        } else {
           await this.router.navigateByUrl('/User-Dashboard');
         }
-      }
-      else
-      {
-
+      } else {
         this.ResetCookiesAuthData();
         await this.router.navigate(['/Login']);
       }
-    }
-    else
-    {
+    } else {
       this.ResetCookiesAuthData();
-     await this.router.navigate(['/Login']);
+      await this.router.navigate(['/Login']);
     }
   }
 
@@ -135,7 +128,6 @@ export class AuthService {
       return false;
     else return true;
   }
-
 
   isAuthenticated(): boolean {
     var token = this.cookieService.get('token');
@@ -163,30 +155,43 @@ export class AuthService {
     const refreshToken = localStorage.getItem('refreshToken');
     var userId = localStorage.getItem('userId');
 
-    if (refreshToken == null || userId == null)
-    {
-      return new Observable<RefreshTokenResponseModel>(observer => {
-        observer.next(new RefreshTokenResponseModel(false, '', '', '', '', '',this.cookieService));
+    if (refreshToken == null || userId == null) {
+      return new Observable<RefreshTokenResponseModel>((observer) => {
+        observer.next(
+          new RefreshTokenResponseModel(
+            false,
+            '',
+            '',
+            '',
+            '',
+            '',
+            this.cookieService
+          )
+        );
         observer.complete();
       });
     }
 
-
     var request = new RefreshTokenModel(refreshToken!, userId!);
 
     // send a POST request to the server to refresh the token
-    return this.http.post<RefreshTokenResponseModel>(this.apiUrl+'/api/Auth/RefreshToken',  request ).pipe(
-      tap((response: RefreshTokenResponseModel) => {
-        if (response.isSucceeded) {
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('createdAt', response.createdAt);
-          localStorage.setItem('expiresAt', response.expiresAt);
-          localStorage.setItem('refreshToken', response.refreshToken);
-        } else {
-          this.ResetLocalStorageAuthData();
-        }
-      })
-    );
+    return this.http
+      .post<RefreshTokenResponseModel>(
+        this.apiUrl + '/api/Auth/RefreshToken',
+        request
+      )
+      .pipe(
+        tap((response: RefreshTokenResponseModel) => {
+          if (response.isSucceeded) {
+            localStorage.setItem('token', response.token);
+            localStorage.setItem('createdAt', response.createdAt);
+            localStorage.setItem('expiresAt', response.expiresAt);
+            localStorage.setItem('refreshToken', response.refreshToken);
+          } else {
+            this.ResetLocalStorageAuthData();
+          }
+        })
+      );
   }
 
   IsTokenValid(token: string) {
@@ -254,5 +259,12 @@ export class AuthService {
     this.cookieService.delete('createdAt');
     this.cookieService.delete('expiresAt');
     this.cookieService.delete('refreshToken');
+  }
+
+  GetUserId(): string {
+    var userId = localStorage.getItem('userId');
+
+    if (userId == null) return '';
+    else return userId;
   }
 }

@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Web.API.Abstraction;
 using Web.API.Data;
 using Web.API.Domain;
+using Web.API.Exceptions;
 using Web.API.Extensions;
 
 namespace Web.API.Features.ContactFeature.Commands.CreateContactCommand;
@@ -38,6 +40,11 @@ public class CreateContactCommandHandler : BaseCommandHandler, IRequestHandler<C
     {
         try
         {
+            var isExists = await _context.Contacts.AnyAsync(x => x.Name == request.Name && x.UserId == request.UserId, cancellationToken);
+
+            if (isExists)
+                return new CreateContactCommandResult(new RecordAlreadyExistException($"Contact with name ({request.Name}) already exist"));
+
             var contact = _mapper.Map<Contact>(request);
 
             contact.WriteCreateAudit();
