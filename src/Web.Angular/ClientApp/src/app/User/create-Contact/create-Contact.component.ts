@@ -3,6 +3,10 @@ import { CreateContactRequestDTO } from 'src/app/DTOs/Contact/CreateContactReque
 import { GroupService } from '../../Services/Group/Group.service';
 import { GetGroupsQueryResultDTO } from '../../DTOs/Group/GetGroupsQueryResultDTO';
 import { AuthService } from 'src/app/Services/Auth/Auth.service';
+import { ContactService } from 'src/app/Services/Contact/Contact.service';
+
+// Import extensions
+import '../../Extensions/StringExtensions';
 
 @Component({
   selector: 'app-create-Contact',
@@ -15,7 +19,8 @@ export class CreateContactComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private groupService: GroupService
+    private groupService: GroupService,
+    private contactService: ContactService
   ) {}
 
   ngOnInit() {
@@ -27,46 +32,82 @@ export class CreateContactComponent implements OnInit {
   }
 
   createContact() {
-    alert(
-      'Name: ' +
-        this.contact.name +
-        '\n' +
-        'Email: ' +
-        this.contact.email +
-        '\n' +
-        'Phone: ' +
-        this.contact.phone +
-        '\n' +
-        'Address: ' +
-        this.contact.address +
-        '\n' +
-        'Country: ' +
-        this.contact.country +
-        '\n' +
-        'City: ' +
-        this.contact.city +
-        '\n' +
-        'State: ' +
-        this.contact.state +
-        '\n' +
-        'Company: ' +
-        this.contact.company +
-        '\n' +
-        'Job Title: ' +
-        this.contact.jobTitle +
-        '\n' +
-        'Image Url: ' +
-        this.contact.imageUrl +
-        '\n' +
-        'Notes: ' +
-        this.contact.notes +
-        '\n' +
-        'Group Id: ' +
-        this.contact.groupId +
-        '\n' +
-        'User Id: ' +
-        this.contact.userId +
-        '\n'
+    // alert(
+    //   'Name: ' +
+    //     this.contact.name +
+    //     '\n' +
+    //     'Email: ' +
+    //     this.contact.email +
+    //     '\n' +
+    //     'Phone: ' +
+    //     this.contact.phone +
+    //     '\n' +
+    //     'Address: ' +
+    //     this.contact.address +
+    //     '\n' +
+    //     'Country: ' +
+    //     this.contact.country +
+    //     '\n' +
+    //     'City: ' +
+    //     this.contact.city +
+    //     '\n' +
+    //     'State: ' +
+    //     this.contact.state +
+    //     '\n' +
+    //     'Company: ' +
+    //     this.contact.company +
+    //     '\n' +
+    //     'Job Title: ' +
+    //     this.contact.jobTitle +
+    //     '\n' +
+    //     'Image Url: ' +
+    //     this.contact.imageUrl +
+    //     '\n' +
+    //     'Notes: ' +
+    //     this.contact.notes +
+    //     '\n' +
+    //     'Group Id: ' +
+    //     this.contact.groupId +
+    //     '\n' +
+    //     'User Id: ' +
+    //     this.contact.userId +
+    //     '\n'
+    // );
+
+    const contactValidationResult = this.validateContact();
+    if (!contactValidationResult.isValid) {
+      alert(contactValidationResult.message);
+      return;
+    }
+
+    this.contactService.Create(this.contact).subscribe(
+      (result) => {
+        alert(
+          'Contact created successfully with id: ' +
+            result.id +
+            ' and group id: ' +
+            result.groupId
+        );
+        this.contact = new CreateContactRequestDTO();
+      },
+      (error) => {
+        alert(error.message);
+      }
     );
+  }
+
+  validateContact(): { isValid: boolean; message: string } {
+    if (
+      this.contact.name.isNullOrEmpty() ||
+      this.contact.phone.isNullOrEmpty()
+    ) {
+      alert('Name and Phone are required');
+      return { isValid: false, message: 'Name and Phone are required' };
+    } else if (this.contact.phone.isNotValidPhoneNumber()) {
+      alert('Phone is not valid');
+      return { isValid: false, message: 'Phone is not valid' };
+    }
+
+    return { isValid: true, message: '' };
   }
 }
