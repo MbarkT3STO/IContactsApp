@@ -15,14 +15,14 @@
     "importHelpers": true,
     "target": "es2017",
     "module": "es2020",
-    "lib": [
-      "es2018",
-      "dom"
-    ],
+    "lib": ["es2018", "dom"],
     "paths": {
-      "@angular/*": ["./node_modules/@angular/*"],
+      "@angular/*": ["./node_modules/@angular/*"]
     }
   },
+  "files": [
+    "./src/app/Services/Helpers/Extensions/Declarations/StringExtensions.d.ts"
+  ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
