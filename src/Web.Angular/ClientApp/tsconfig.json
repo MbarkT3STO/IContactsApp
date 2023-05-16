@@ -20,13 +20,18 @@
       "@angular/*": ["./node_modules/@angular/*"]
     }
   },
-  "files": [
-    "./src/app/Services/Helpers/Extensions/Declarations/StringExtensions.d.ts"
-  ],
+  // "include": [
+  //   "./src/app/Services/Helpers/Extensions/Declarations/StringExtensions.d.ts"
+  // ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "./src/app/Services/Helpers/Extensions/stringExtensions.ts"
+  ]
 }

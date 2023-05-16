@@ -4,7 +4,7 @@ import { GroupService } from '../../Services/Group/Group.service';
 import { GetGroupsQueryResultDTO } from '../../DTOs/Group/GetGroupsQueryResultDTO';
 import { AuthService } from 'src/app/Services/Auth/Auth.service';
 import { ContactService } from 'src/app/Services/Contact/Contact.service';
-import { StringExtensions } from 'src/app/Services/Helpers/Extensions/StringExtensions';
+// import { StringExtensions } from 'src/app/Services/Helpers/Extensions/StringExtensions';
 
 @Component({
   selector: 'app-create-Contact',
