@@ -4,7 +4,7 @@ import { GroupService } from '../../Services/Group/Group.service';
 import { GetGroupsQueryResultDTO } from '../../DTOs/Group/GetGroupsQueryResultDTO';
 import { AuthService } from 'src/app/Services/Auth/Auth.service';
 import { ContactService } from 'src/app/Services/Contact/Contact.service';
-// import { StringExtensions } from 'src/app/Services/Helpers/Extensions/StringExtensions';
+import { StringUtilService } from 'src/app/Services/Helpers/Extensions/String/StringUtil.service';
 
 @Component({
   selector: 'app-create-Contact',
@@ -18,7 +18,8 @@ export class CreateContactComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private groupService: GroupService,
-    private contactService: ContactService
+    private contactService: ContactService,
+    private stringUtil: StringUtilService
   ) {}
 
   ngOnInit() {
@@ -72,7 +73,7 @@ export class CreateContactComponent implements OnInit {
     //     '\n'
     // );
 
-    const contactValidationResult = this.validateContact();
+    var contactValidationResult = this.validateContact();
     if (!contactValidationResult.isValid) {
       alert(contactValidationResult.message);
       return;
@@ -96,13 +97,11 @@ export class CreateContactComponent implements OnInit {
 
   validateContact(): { isValid: boolean; message: string } {
     if (
-      this.contact.name.isNullOrEmpty() ||
-      this.contact.phone.isNullOrEmpty()
+      this.stringUtil.IsNullOrEmpty(this.contact.name) &&
+      this.stringUtil.IsNullOrEmpty(this.contact.phone)
     ) {
-      alert('Name and Phone are required');
       return { isValid: false, message: 'Name and Phone are required' };
-    } else if (this.contact.phone.isNotValidPhoneNumber()) {
-      alert('Phone is not valid');
+    } else if (this.stringUtil.IsNotValidPhoneNumber(this.contact.phone)) {
       return { isValid: false, message: 'Phone is not valid' };
     }
 
