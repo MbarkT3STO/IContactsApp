@@ -14,13 +14,15 @@ import { StringUtilService } from 'src/app/Services/Helpers/Extensions/String/St
 export class CreateContactComponent implements OnInit {
   groups: GetGroupsQueryResultDTO[] = [];
   contact: CreateContactRequestDTO = new CreateContactRequestDTO();
+  selectedFile: File | null = null;
+  files: File[] = [];
+  url: any;
 
   constructor(
     private authService: AuthService,
     private groupService: GroupService,
     private contactService: ContactService,
-    private stringUtil: StringUtilService,
-    private selectedFile: File
+    private stringUtil: StringUtilService
   ) {}
 
   ngOnInit() {
@@ -31,8 +33,20 @@ export class CreateContactComponent implements OnInit {
     this.contact.userId = this.authService.GetUserId();
   }
 
-  onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
+  onSelectFile(files: FileList) {
+    if (files.length > 0) {
+      this.selectedFile = files[0];
+
+      var reader = new FileReader();
+      reader.readAsDataURL(this.selectedFile);
+      reader.onload = (_event) => {
+        this.url = _event.target?.result;
+
+        this.files.push(this.selectedFile as File);
+
+        this.contact.imageFile = this.files[0];
+      };
+    }
   }
 
   createContact() {
@@ -42,7 +56,7 @@ export class CreateContactComponent implements OnInit {
       return;
     }
 
-    this.contact.imageFile = this.selectedFile;
+    this.contact.imageFile = this.files[0];
 
     this.contactService.Create(this.contact).subscribe(
       (result) => {
