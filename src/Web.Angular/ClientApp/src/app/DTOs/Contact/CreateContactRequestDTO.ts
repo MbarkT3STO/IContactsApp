@@ -9,6 +9,7 @@ export class CreateContactRequestDTO {
   public company: string;
   public jobTitle: string;
   public imageUrl: string;
+  public imageFile: File | null;
   public notes: string;
   public groupId: number;
   public userId: string;
@@ -24,6 +25,7 @@ export class CreateContactRequestDTO {
     this.company = '';
     this.jobTitle = '';
     this.imageUrl = '';
+    this.imageFile = null;
     this.notes = '';
     this.groupId = 0;
     this.userId = '';

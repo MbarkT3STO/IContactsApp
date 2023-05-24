@@ -1,4 +1,6 @@
 
+using System.IO;
+using System.Net.Http.Headers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Web.API.Exceptions;
@@ -37,6 +39,24 @@ public class ContactsController : ExtendedControllerBase
     [HttpPost]
     public async Task<ActionResult<CreateContactCommandResultDTO>> Post(CreateContactCommand command)
     {
+        var folderName = Path.Combine("Resources", "Images");
+        var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+
+        var formCollection = await Request.ReadFormAsync();
+        var imageFile = formCollection.Files.FirstOrDefault();
+
+        if (command.ImageFile != null)
+        {
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+            var fullPath = Path.Combine(pathToSave, fileName);
+            var dbPath = Path.Combine(folderName, fileName);
+
+            using var stream = new FileStream(fullPath, FileMode.Create);
+            imageFile.CopyTo(stream);
+
+            command.ImageUrl = dbPath;
+        }
+
         var result = await Send(command);
 
         if (result.Exception is RecordAlreadyExistException)

@@ -741,6 +741,7 @@
             id="kt_ecommerce_settings_general_form"
             class="form"
             (submit)="createContact()"
+            enctype="multipart/form-data"
           >
             <!--begin::Input group-->
             <div class="mb-7">
@@ -791,6 +792,7 @@
                       name="imageUrl"
                       accept=".png, .jpg, .jpeg"
                       [(ngModel)]="contact.imageUrl"
+                      (change)="onFileSelected($event)"
                     />
                     <input type="hidden" name="avatar_remove" />
                     <!--end::Inputs-->

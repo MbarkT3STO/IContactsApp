@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Web.API.Data;
 using Web.API.Extensions;
 
@@ -26,6 +27,13 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+
+app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Resources")),
+    RequestPath = "/Resources"
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

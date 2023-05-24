@@ -19,7 +19,8 @@ export class CreateContactComponent implements OnInit {
     private authService: AuthService,
     private groupService: GroupService,
     private contactService: ContactService,
-    private stringUtil: StringUtilService
+    private stringUtil: StringUtilService,
+    private selectedFile: File
   ) {}
 
   ngOnInit() {
@@ -30,54 +31,18 @@ export class CreateContactComponent implements OnInit {
     this.contact.userId = this.authService.GetUserId();
   }
 
-  createContact() {
-    // alert(
-    //   'Name: ' +
-    //     this.contact.name +
-    //     '\n' +
-    //     'Email: ' +
-    //     this.contact.email +
-    //     '\n' +
-    //     'Phone: ' +
-    //     this.contact.phone +
-    //     '\n' +
-    //     'Address: ' +
-    //     this.contact.address +
-    //     '\n' +
-    //     'Country: ' +
-    //     this.contact.country +
-    //     '\n' +
-    //     'City: ' +
-    //     this.contact.city +
-    //     '\n' +
-    //     'State: ' +
-    //     this.contact.state +
-    //     '\n' +
-    //     'Company: ' +
-    //     this.contact.company +
-    //     '\n' +
-    //     'Job Title: ' +
-    //     this.contact.jobTitle +
-    //     '\n' +
-    //     'Image Url: ' +
-    //     this.contact.imageUrl +
-    //     '\n' +
-    //     'Notes: ' +
-    //     this.contact.notes +
-    //     '\n' +
-    //     'Group Id: ' +
-    //     this.contact.groupId +
-    //     '\n' +
-    //     'User Id: ' +
-    //     this.contact.userId +
-    //     '\n'
-    // );
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+  }
 
+  createContact() {
     var contactValidationResult = this.validateContact();
     if (!contactValidationResult.isValid) {
       alert(contactValidationResult.message);
       return;
     }
+
+    this.contact.imageFile = this.selectedFile;
 
     this.contactService.Create(this.contact).subscribe(
       (result) => {
