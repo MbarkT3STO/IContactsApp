@@ -2,6 +2,7 @@
 using System.Text;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Web.API.Features.ContactFeature.Queries;
 using Web.API.Identity;
@@ -57,6 +58,32 @@ public static class DIExtensions
                 ValidAudience = builder.Configuration["JwtOptions:Audience"],
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtOptions:Key"]))
             };
+        });
+    }
+
+
+    /// <summary>
+    /// Configure Static Files for the application
+    /// </summary>
+    public static void ConfigureStaticFiles(this WebApplication app)
+    {
+        app.UseStaticFiles();
+
+        // Check if the Resources folder exists, if not, create it
+        var resourcesPath = Path.Combine(Directory.GetCurrentDirectory(), "Resources");
+        if (!Directory.Exists(resourcesPath))
+        {
+            Directory.CreateDirectory(resourcesPath);
+        }
+
+        // Create Images folder inside Resources folder
+        var imagesPath = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "Images");
+        Directory.CreateDirectory(imagesPath);
+
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Resources")),
+            RequestPath = "/Resources"
         });
     }
 }
