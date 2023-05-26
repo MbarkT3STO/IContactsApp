@@ -25,7 +25,7 @@ public record CreateContactCommand : IRequest<CreateContactCommandResult>
     public string Company { get; set; }
     public string JobTitle { get; set; }
     public string ImageUrl { get; set; }
-    public IFormFile ImageFile { get; set; }
+    public IFormFile? ImageFile { get; set; }
     public string Notes { get; set; }
     public int GroupId { get; set; }
     public string UserId { get; set; }

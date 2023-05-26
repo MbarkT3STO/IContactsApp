@@ -33,19 +33,12 @@ export class CreateContactComponent implements OnInit {
     this.contact.userId = this.authService.GetUserId();
   }
 
-  onSelectFile(files: FileList) {
+  onSelectFile(event: any) {
+    const files = event.target.files;
     if (files.length > 0) {
-      this.selectedFile = files[0];
+      this.selectedFile = files[0] as File;
 
-      var reader = new FileReader();
-      reader.readAsDataURL(this.selectedFile);
-      reader.onload = (_event) => {
-        this.url = _event.target?.result;
-
-        this.files.push(this.selectedFile as File);
-
-        this.contact.imageFile = this.files[0];
-      };
+      this.contact.imageFile = this.selectedFile;
     }
   }
 
@@ -56,9 +49,33 @@ export class CreateContactComponent implements OnInit {
       return;
     }
 
-    this.contact.imageFile = this.files[0];
+    var formData = new FormData();
 
-    this.contactService.Create(this.contact).subscribe(
+    var command = {
+      name: this.contact.name,
+      email: this.contact.email,
+      phone: this.contact.phone,
+      address: this.contact.address,
+      country: this.contact.country,
+      city: this.contact.city,
+      state: this.contact.state,
+      company: this.contact.company,
+      jobTitle: this.contact.jobTitle,
+      imageUrl: this.contact.imageUrl,
+      imageFile: this.contact.imageFile,
+      notes: this.contact.notes,
+      groupId: this.contact.groupId,
+      userId: this.contact.userId,
+    };
+
+    Object.entries(command).forEach(([key, value]) => {
+      formData.append(key, value as string);
+    });
+
+    // formData.append('command', JSON.stringify(command));
+    formData.append('imageFile', this.selectedFile as Blob);
+
+    this.contactService.CreateFromForm(formData).subscribe(
       (result) => {
         alert(
           'Contact created successfully with id: ' +

@@ -22,4 +22,15 @@ export class ContactService {
   ): Observable<CreateContactResponseDTO> {
     return this.http.post<CreateContactResponseDTO>(this.apiUrl, request);
   }
+
+  /**
+   * Creates a new contact from a form data object (used for file upload)
+   * @param request The request object
+   * @returns The response object as an observable
+   **/
+  public CreateFromForm(
+    request: FormData
+  ): Observable<CreateContactResponseDTO> {
+    return this.http.post<CreateContactResponseDTO>(this.apiUrl, request);
+  }
 }

@@ -792,7 +792,7 @@
                       name="imageUrl"
                       accept=".png, .jpg, .jpeg"
                       [(ngModel)]="contact.imageUrl"
-                      (change)="onSelectFile($event.target.files as FileList)"
+                      (change)="onSelectFile($event)"
                     />
                     <input type="hidden" name="avatar_remove" />
                     <!--end::Inputs-->

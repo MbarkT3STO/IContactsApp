@@ -37,13 +37,12 @@ public class ContactsController : ExtendedControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<CreateContactCommandResultDTO>> Post(CreateContactCommand command)
+    public async Task<ActionResult<CreateContactCommandResultDTO>> Post([FromForm] CreateContactCommand command, [FromForm] IFormFile? imageFile)
     {
         var folderName = Path.Combine("Resources", "Images");
         var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
 
-        var formCollection = await Request.ReadFormAsync();
-        var imageFile = formCollection.Files.FirstOrDefault();
+        command.ImageFile = imageFile;
 
         if (command.ImageFile != null)
         {
