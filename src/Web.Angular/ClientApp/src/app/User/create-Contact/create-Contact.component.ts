@@ -5,6 +5,8 @@ import { GetGroupsQueryResultDTO } from '../../DTOs/Group/GetGroupsQueryResultDT
 import { AuthService } from 'src/app/Services/Auth/Auth.service';
 import { ContactService } from 'src/app/Services/Contact/Contact.service';
 import { StringUtilService } from 'src/app/Services/Helpers/Extensions/String/StringUtil.service';
+// import Swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-create-Contact',
@@ -43,6 +45,18 @@ export class CreateContactComponent implements OnInit {
   }
 
   createContact() {
+    // Swal.fire('Good job!', 'You clicked the button!', 'success');
+
+    Swal.fire({
+      text: "Here's a basic example of SweetAlert!",
+      icon: 'success',
+      buttonsStyling: false,
+      confirmButtonText: 'Ok, got it!',
+      customClass: {
+        confirmButton: 'btn btn-primary',
+      },
+    });
+
     var contactValidationResult = this.validateContact();
     if (!contactValidationResult.isValid) {
       alert(contactValidationResult.message);

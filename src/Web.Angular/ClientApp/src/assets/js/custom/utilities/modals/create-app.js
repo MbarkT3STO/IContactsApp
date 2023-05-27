@@ -3,7 +3,7 @@
 // Class definition
 var KTCreateApp = function () {
 	// Elements
-	var modal;	
+	var modal;
 	var modalEl;
 
 	var stepper;
@@ -92,7 +92,7 @@ var KTCreateApp = function () {
 					// Prevent default button action
 					e.preventDefault();
 
-					// Disable button to avoid multiple click 
+					// Disable button to avoid multiple click
 					formSubmitButton.disabled = true;
 
 					// Show loading indication
