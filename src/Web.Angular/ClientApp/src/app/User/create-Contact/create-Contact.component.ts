@@ -83,7 +83,8 @@ export class CreateContactComponent implements OnInit {
             ' and group id: ' +
             result.groupId
         );
-        this.contact = new CreateContactRequestDTO();
+
+        this.resetContact();
       },
       (error) => {
         alert(error.message);
@@ -102,5 +103,12 @@ export class CreateContactComponent implements OnInit {
     }
 
     return { isValid: true, message: '' };
+  }
+
+  resetContact() {
+    this.contact = new CreateContactRequestDTO();
+    this.contact.userId = this.authService.GetUserId();
+
+    this.selectedFile = null;
   }
 }

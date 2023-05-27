@@ -367,3 +367,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Ignore the Resources/Images diirectory in the WEB.API project
+src/Web.API/Resources/Images/
