@@ -7,11 +7,15 @@ import { ContactService } from 'src/app/Services/Contact/Contact.service';
 import { StringUtilService } from 'src/app/Services/Helpers/Extensions/String/StringUtil.service';
 // import Swal from 'sweetalert2';
 import Swal from 'sweetalert2';
+// import '../../../assets/plugins/global/plugins.bundle.js';
 
 @Component({
   selector: 'app-create-Contact',
   templateUrl: './create-Contact.component.html',
-  styleUrls: ['./create-Contact.component.css'],
+  styleUrls: [
+    './create-Contact.component.css',
+    '../../../assets/plugins/global/plugins.bundle.css',
+  ],
 })
 export class CreateContactComponent implements OnInit {
   groups: GetGroupsQueryResultDTO[] = [];
@@ -47,19 +51,9 @@ export class CreateContactComponent implements OnInit {
   createContact() {
     // Swal.fire('Good job!', 'You clicked the button!', 'success');
 
-    Swal.fire({
-      text: "Here's a basic example of SweetAlert!",
-      icon: 'success',
-      buttonsStyling: false,
-      confirmButtonText: 'Ok, got it!',
-      customClass: {
-        confirmButton: 'btn btn-primary',
-      },
-    });
-
     var contactValidationResult = this.validateContact();
     if (!contactValidationResult.isValid) {
-      alert(contactValidationResult.message);
+      Swal.fire('Error!', contactValidationResult.message, 'error');
       return;
     }
 
@@ -86,22 +80,16 @@ export class CreateContactComponent implements OnInit {
       formData.append(key, value as string);
     });
 
-    // formData.append('command', JSON.stringify(command));
     formData.append('imageFile', this.selectedFile as Blob);
 
     this.contactService.CreateFromForm(formData).subscribe(
       (result) => {
-        alert(
-          'Contact created successfully with id: ' +
-            result.id +
-            ' and group id: ' +
-            result.groupId
-        );
+        Swal.fire('Success!', 'Contact created successfully!', 'success');
 
         this.resetContact();
       },
       (error) => {
-        alert(error.message);
+        Swal.fire('Error!', error.error.message, 'error');
       }
     );
   }
