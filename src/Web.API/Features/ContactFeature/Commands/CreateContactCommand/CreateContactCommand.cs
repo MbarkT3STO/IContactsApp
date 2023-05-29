@@ -13,7 +13,7 @@ using Web.API.Extensions;
 
 namespace Web.API.Features.ContactFeature.Commands.CreateContactCommand;
 
-public record CreateContactCommand : IRequest<CreateContactCommandResult>
+public record CreateContactCommand: IRequest<CreateContactCommandResult>
 {
     public string Name { get; set; }
     public string? Email { get; set; }
@@ -31,20 +31,26 @@ public record CreateContactCommand : IRequest<CreateContactCommandResult>
     public string UserId { get; set; }
 }
 
-public class CreateContactCommandHandler : BaseCommandHandler, IRequestHandler<CreateContactCommand, CreateContactCommandResult>
+public class CreateContactCommandHandler: BaseCommandHandler, IRequestHandler<CreateContactCommand, CreateContactCommandResult>
 {
-    public CreateContactCommandHandler(AppDbContext context, IMapper mapper) : base(context, mapper)
-    {
-    }
+    public CreateContactCommandHandler(AppDbContext context, IMapper mapper): base(context, mapper) { }
 
-    public async Task<CreateContactCommandResult> Handle(CreateContactCommand request, CancellationToken cancellationToken)
+    public async Task<CreateContactCommandResult> Handle(CreateContactCommand request, CancellationToken cancellationToken
+    )
     {
         try
         {
-            var isExists = await _context.Contacts.AnyAsync(x => x.Name == request.Name && x.UserId == request.UserId, cancellationToken);
+            var isExists = await _context.Contacts.AnyAsync(
+                x => x.Name == request.Name && x.UserId == request.UserId,
+                cancellationToken
+            );
 
             if (isExists)
-                return new CreateContactCommandResult(new RecordAlreadyExistException($"Contact with name ({request.Name}) already exist"));
+                return new CreateContactCommandResult(
+                    new RecordAlreadyExistException(
+                        $"Contact with name ({request.Name}) already exist"
+                    )
+                );
 
             if (request.ImageFile != null)
                 request.ImageUrl = await SaveImageAsync(request.ImageFile);
@@ -58,8 +64,7 @@ public class CreateContactCommandHandler : BaseCommandHandler, IRequestHandler<C
             _context.Contacts.Add(contact);
             await _context.SaveChangesAsync(cancellationToken);
 
-            var dto = _mapper.Map<CreateContactCommandResultDTO>(contact);
-
+            var dto    = _mapper.Map<CreateContactCommandResultDTO>(contact);
             var result = new CreateContactCommandResult(dto);
 
             return result;
@@ -68,7 +73,6 @@ public class CreateContactCommandHandler : BaseCommandHandler, IRequestHandler<C
         {
             return new CreateContactCommandResult(ex);
         }
-
     }
 
     /// <summary>
@@ -83,7 +87,7 @@ public class CreateContactCommandHandler : BaseCommandHandler, IRequestHandler<C
 
         var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
         var fullPath = Path.Combine(pathToSave, fileName);
-        var dbPath = Path.Combine(folderName, fileName);
+        var dbPath   = Path.Combine(folderName, fileName);
 
         using var stream = new FileStream(fullPath, FileMode.Create);
         imageFile.CopyTo(stream);

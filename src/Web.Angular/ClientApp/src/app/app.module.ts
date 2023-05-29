@@ -19,6 +19,7 @@ import { AuthInterceptor } from './Interceptors/AuthInterceptor';
 
 import { GetContactsComponent } from './User/get-Contacts/get-Contacts.component';
 import { CreateContactComponent } from './User/create-Contact/create-Contact.component';
+import { ViewContactComponent } from './User/view-Contact/view-Contact.component';
 
 import { UserHeaderComponent } from './User/user-Header/user-Header.component';
 import { UserLayoutComponent } from './User/user-Layout/user-Layout.component';
@@ -98,6 +99,11 @@ export function tokenGetter() {
             component: CreateContactComponent,
             canActivate: [AuthGuard],
           },
+          {
+            path: 'User/Contact/View-Contact/:id',
+            component: ViewContactComponent,
+            canActivate: [AuthGuard],
+          }
         ],
       },
 

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CreateContactRequestDTO } from 'src/app/DTOs/Contact/CreateContactRequestDTO';
 import { CreateContactResponseDTO } from 'src/app/DTOs/Contact/CreateContactResponseDTO';
+import { ViewContactResponseDTO } from 'src/app/DTOs/Contact/ViewContactResponseDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,16 @@ import { CreateContactResponseDTO } from 'src/app/DTOs/Contact/CreateContactResp
 export class ContactService {
   apiUrl = 'http://localhost:5272/api/Contacts';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
+
+  /**
+   * Gets a contact by id
+   * @param id The id of the contact
+   * @returns The response object as an observable
+   * */
+  public Get(id: number): Observable<ViewContactResponseDTO> {
+    return this.http.get<ViewContactResponseDTO>(this.apiUrl + '/' + id);
+  }
 
   /**
    * Creates a new contact
