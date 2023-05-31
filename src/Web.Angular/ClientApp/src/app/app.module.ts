@@ -20,6 +20,7 @@ import { AuthInterceptor } from './Interceptors/AuthInterceptor';
 import { GetContactsComponent } from './User/get-Contacts/get-Contacts.component';
 import { CreateContactComponent } from './User/create-Contact/create-Contact.component';
 import { ViewContactComponent } from './User/view-Contact/view-Contact.component';
+import { ContactsListComponent } from './User/contacts-List/contacts-List.component';
 
 import { UserHeaderComponent } from './User/user-Header/user-Header.component';
 import { UserLayoutComponent } from './User/user-Layout/user-Layout.component';
@@ -51,6 +52,7 @@ export function tokenGetter() {
     UserLayoutComponent,
     UserFooterComponent,
     UserSideBarComponent,
+    ContactsListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -93,6 +95,7 @@ export function tokenGetter() {
             path: 'User/Contact/Get-Contacts',
             component: GetContactsComponent,
             canActivate: [AuthGuard],
+
           },
           {
             path: 'User/Contact/Create-Contact',
@@ -103,7 +106,12 @@ export function tokenGetter() {
             path: 'User/Contact/View-Contact/:id',
             component: ViewContactComponent,
             canActivate: [AuthGuard],
-          }
+          },
+          {
+            path: 'User/Contact/Contacts-List',
+            component: ContactsListComponent,
+            canActivate: [AuthGuard],
+          },
         ],
       },
 

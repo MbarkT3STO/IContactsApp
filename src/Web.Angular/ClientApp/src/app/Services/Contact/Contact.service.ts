@@ -1,9 +1,10 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { CreateContactRequestDTO } from 'src/app/DTOs/Contact/CreateContactRequestDTO';
+import { HttpClient }               from '@angular/common/http';
+import { Injectable }               from '@angular/core';
+import { Observable }               from 'rxjs';
+import { Contact }                  from 'src/app/DTOs/Contact/Contact';
+import { CreateContactRequestDTO }  from 'src/app/DTOs/Contact/CreateContactRequestDTO';
 import { CreateContactResponseDTO } from 'src/app/DTOs/Contact/CreateContactResponseDTO';
-import { ViewContactResponseDTO } from 'src/app/DTOs/Contact/ViewContactResponseDTO';
+import { ViewContactResponseDTO }   from 'src/app/DTOs/Contact/ViewContactResponseDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -11,8 +12,15 @@ import { ViewContactResponseDTO } from 'src/app/DTOs/Contact/ViewContactResponse
 export class ContactService {
   apiUrl = 'http://localhost:5272/api/Contacts';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
+  /**
+   * Gets all contacts
+   * @returns The response object as an observable
+   * */
+  public GetAll(): Observable<Contact[]> {
+    return this.http.get<Contact[]>(this.apiUrl);
+  }
   /**
    * Gets a contact by id
    * @param id The id of the contact
@@ -29,7 +37,7 @@ export class ContactService {
    **/
   public Create(
     request: CreateContactRequestDTO
-  ): Observable<CreateContactResponseDTO> {
+    )      : Observable<CreateContactResponseDTO> {
     return this.http.post<CreateContactResponseDTO>(this.apiUrl, request);
   }
 
@@ -40,7 +48,7 @@ export class ContactService {
    **/
   public CreateFromForm(
     request: FormData
-  ): Observable<CreateContactResponseDTO> {
+    )      : Observable<CreateContactResponseDTO> {
     return this.http.post<CreateContactResponseDTO>(this.apiUrl, request);
   }
 }
