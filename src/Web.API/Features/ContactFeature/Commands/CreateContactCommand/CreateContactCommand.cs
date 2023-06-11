@@ -87,7 +87,7 @@ public class CreateContactCommandHandler: BaseCommandHandler, IRequestHandler<Cr
 
         var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
         var fullPath = Path.Combine(pathToSave, fileName);
-        var dbPath   = Path.Combine(folderName, fileName);
+        var dbPath   = fullPath;
 
         using var stream = new FileStream(fullPath, FileMode.Create);
         imageFile.CopyTo(stream);
