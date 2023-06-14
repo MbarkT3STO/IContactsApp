@@ -72,7 +72,7 @@
           <div class = "d-flex align-items-center">
             <!--begin:: Avatar-->
             <div class = "symbol symbol-40px symbol-circle">
-            <img alt   = "Pic" src = "https://localhost:7004/{{contact.imageUrl}}" />
+              <img alt   = "Pic" [src]="contact.imageUrl ? 'https://localhost:7004/'+contact.imageUrl : 'https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-6.png'" />
             </div>
             <!--end   : : Avatar-->
             <!--begin:: Details-->
