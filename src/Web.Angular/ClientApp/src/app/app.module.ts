@@ -22,6 +22,8 @@ import { CreateContactComponent } from './User/create-Contact/create-Contact.com
 import { ViewContactComponent } from './User/view-Contact/view-Contact.component';
 import { ContactsListComponent } from './User/contacts-List/contacts-List.component';
 
+import { GetGroupsComponent } from './User/get-Groups/get-Groups.component';
+
 import { UserHeaderComponent } from './User/user-Header/user-Header.component';
 import { UserLayoutComponent } from './User/user-Layout/user-Layout.component';
 import { UserFooterComponent } from './User/user-Footer/user-Footer.component';
@@ -52,7 +54,8 @@ export function tokenGetter() {
     UserLayoutComponent,
     UserFooterComponent,
     UserSideBarComponent,
-    ContactsListComponent
+    ContactsListComponent,
+    GetGroupsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -110,6 +113,11 @@ export function tokenGetter() {
           {
             path: 'User/Contact/Contacts-List',
             component: ContactsListComponent,
+            canActivate: [AuthGuard],
+          },
+          {
+            path: 'User/Group/Get-Groups',
+            component: GetGroupsComponent,
             canActivate: [AuthGuard],
           },
         ],
