@@ -5,4 +5,5 @@ export class GetGroupsQueryResultDTO {
   createdAt: Date = new Date();
   updatedAt: Date = new Date();
   userId: string = '';
+  contactsCount:number = 0;
 }

@@ -10,7 +10,7 @@ using Web.API.Extensions;
 
 namespace Web.API.Features.GroupFeature.Commands.Create;
 
-public class CreateGroupCommand : IRequest<CreateGroupCommandResult>
+public class CreateGroupCommand: IRequest<CreateGroupCommandResult>
 {
 	public string Name { get; set; }
 	public string Description { get; set; }
@@ -18,15 +18,15 @@ public class CreateGroupCommand : IRequest<CreateGroupCommandResult>
 
 	public CreateGroupCommand(string name, string description, string userId)
 	{
-		Name = name;
+		Name        = name;
 		Description = description;
-		UserId = userId;
+		UserId      = userId;
 	}
 }
 
-public class CreateGroupCommandHandler : BaseCommandHandler, IRequestHandler<CreateGroupCommand, CreateGroupCommandResult>
+public class CreateGroupCommandHandler: BaseCommandHandler, IRequestHandler<CreateGroupCommand, CreateGroupCommandResult>
 {
-	public CreateGroupCommandHandler(AppDbContext context, IMapper mapper) : base(context, mapper)
+	public CreateGroupCommandHandler(AppDbContext context, IMapper mapper): base(context, mapper)
 	{
 	}
 
@@ -35,16 +35,18 @@ public class CreateGroupCommandHandler : BaseCommandHandler, IRequestHandler<Cre
 		try
 		{
 			var isExist = await _context.Groups.AnyAsync(x => x.Name == request.Name && x.UserId == request.UserId, cancellationToken);
-			
+
 			if (isExist)
-			return new CreateGroupCommandResult(new RecordAlreadyExistException($"Group with name ({request.Name}) already exist"));
-			
+				return new CreateGroupCommandResult(new RecordAlreadyExistException($"Group with name ({request.Name}) already exist"));
+
 			var group = _mapper.Map<Group>(request);
 
 			group.WriteCreateAudit();
 
 			await _context.Groups.AddAsync(group, cancellationToken);
 			await _context.SaveChangesAsync(cancellationToken);
+
+			await _context.Entry(group).Reference(x => x.Contacts).LoadAsync(cancellationToken);
 
 			var value = _mapper.Map<CreateGroupCommandResultDTO>(group);
 

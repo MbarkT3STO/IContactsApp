@@ -6,11 +6,12 @@ using Web.API.Domain;
 
 namespace Web.API.Features.GroupFeature.Commands.Create;
 
-public class Mapping : Profile
+public class Mapping: Profile
 {
-    public Mapping()
-    {
-        CreateMap<CreateGroupCommand, Group>();
-        CreateMap<Group, CreateGroupCommandResultDTO>();
-    }
+	public Mapping()
+	{
+		CreateMap<CreateGroupCommand, Group>();
+		
+		CreateMap<Group, CreateGroupCommandResultDTO>().ForMember(dest => dest.ContactsCount, opt => opt.MapFrom(src => src.Contacts.Count()));
+	}
 }

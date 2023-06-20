@@ -7,10 +7,10 @@ using Web.API.Domain;
 
 namespace Web.API.Features.GroupFeature.Queries.GetGroupsQuery;
 
-public class Mapping : Profile
+public class Mapping: Profile
 {
-    public Mapping()
-    {
-        CreateMap<Group, GetGroupsQueryResultDTO>();
-    }
+	public Mapping()
+	{
+		CreateMap<Group, GetGroupsQueryResultDTO>().ForMember(dest => dest.ContactsCount, opt => opt.MapFrom(src => src.Contacts.Count()));
+	}
 }

@@ -4,8 +4,8 @@ import { GetGroupsQueryResultDTO } from '../../DTOs/Group/GetGroupsQueryResultDT
 import { CreateGroupRequestDTO }   from 'src/app/DTOs/Group/CreateGroupRequestDTO';
 import Swal                        from 'sweetalert2';
 import { StringUtilService }       from 'src/app/Services/Helpers/Extensions/String/StringUtil.service';
-import { IdentityService } from 'src/app/Services/Identity/Identity.service';
-import { AuthService } from 'src/app/Services/Auth/Auth.service';
+import { IdentityService }         from 'src/app/Services/Identity/Identity.service';
+import { AuthService }             from 'src/app/Services/Auth/Auth.service';
 
 @Component({
   selector   : 'app-get-Groups',
@@ -18,9 +18,9 @@ export class GetGroupsComponent implements OnInit {
 
   constructor(
     private groupService: GroupService,
-    private stringUtil: StringUtilService,
-    private identity: IdentityService,
-    private auth: AuthService
+    private stringUtil  : StringUtilService,
+    private identity    : IdentityService,
+    private auth        : AuthService
   ) {}
 
   ngOnInit() {
@@ -28,12 +28,11 @@ export class GetGroupsComponent implements OnInit {
       .GetGroups()
       .subscribe((result) => (this.groups = result!));
 
-    this.createGroupRequest.userId= this.auth.GetUserId();
+    this.createGroupRequest.userId = this.auth.GetUserId();
   }
 
   createGroup() {
     var validationResult = this.validateGroup();
-alert(this.createGroupRequest.name)
     if (validationResult.isValid) {
       this.groupService.Create(this.createGroupRequest).subscribe(
         (result) => {
@@ -43,13 +42,11 @@ alert(this.createGroupRequest.name)
           this.createGroupRequest.name = '';
         },
         (error) => {
-          Swal.fire('error', error.error.message, 'error');
-          // alert(error.message);
+          Swal.fire('error', error.message, 'error');
         }
       );
     } else {
       Swal.fire('error', validationResult.message, 'error');
-      // alert(validationResult.message);
     }
   }
 
