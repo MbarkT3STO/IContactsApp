@@ -81,7 +81,7 @@
             <!--begin:: Details-->
             <div class = "ms-4">
               <a
-                href  = "../../demo8/dist/apps/contacts/view-contact.html"
+                [routerLink]="['/User/Contact/View-Contact', contact.id]"
                 class = "fs-6 fw-bold text-gray-900 text-hover-primary mb-2"
                 >{{contact.name}}</a
               >

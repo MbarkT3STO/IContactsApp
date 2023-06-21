@@ -56,6 +56,7 @@ export function tokenGetter() {
     UserSideBarComponent,
     ContactsListComponent,
     GetGroupsComponent,
+    ViewContactComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -119,7 +120,7 @@ export function tokenGetter() {
             path: 'User/Group/Get-Groups',
             component: GetGroupsComponent,
             canActivate: [AuthGuard],
-          },
+          }
         ],
       },
 
