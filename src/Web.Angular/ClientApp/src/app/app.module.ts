@@ -1,35 +1,36 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { BrowserModule }                       from '@angular/platform-browser';
+import { NgModule }                            from '@angular/core';
+import { FormsModule }                         from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { RouterModule }                        from '@angular/router';
 
-import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
+import { AppComponent }           from './app.component';
+import { NavMenuComponent }       from './nav-menu/nav-menu.component';
+import { HomeComponent }          from './home/home.component';
+import { CounterComponent }       from './counter/counter.component';
+import { FetchDataComponent }     from './fetch-data/fetch-data.component';
 import { UserDashboardComponent } from './User-Dashboard/User-Dashboard.component';
-import { LoginComponent } from './Auth/Login/Login.component';
-import { AuthService } from './Services/Auth/Auth.service';
-import { CheckUserComponent } from './Check-User/Check-User.component';
-import { IdentityService } from './Services/Identity/Identity.service';
-import { GroupService } from './Services/Group/Group.service';
-import { AuthInterceptor } from './Interceptors/AuthInterceptor';
+import { LoginComponent }         from './Auth/Login/Login.component';
+import { AuthService }            from './Services/Auth/Auth.service';
+import { CheckUserComponent }     from './Check-User/Check-User.component';
+import { IdentityService }        from './Services/Identity/Identity.service';
+import { GroupService }           from './Services/Group/Group.service';
+import { AuthInterceptor }        from './Interceptors/AuthInterceptor';
 
-import { GetContactsComponent } from './User/get-Contacts/get-Contacts.component';
+import { GetContactsComponent }   from './User/get-Contacts/get-Contacts.component';
 import { CreateContactComponent } from './User/create-Contact/create-Contact.component';
-import { ViewContactComponent } from './User/view-Contact/view-Contact.component';
-import { ContactsListComponent } from './User/contacts-List/contacts-List.component';
+import { ViewContactComponent }   from './User/view-Contact/view-Contact.component';
+import { ContactsListComponent }  from './User/contacts-List/contacts-List.component';
 
 import { GetGroupsComponent } from './User/get-Groups/get-Groups.component';
+import { ViewGroupComponent } from './User/view-Group/view-Group.component';
 
-import { UserHeaderComponent } from './User/user-Header/user-Header.component';
-import { UserLayoutComponent } from './User/user-Layout/user-Layout.component';
-import { UserFooterComponent } from './User/user-Footer/user-Footer.component';
+import { UserHeaderComponent }  from './User/user-Header/user-Header.component';
+import { UserLayoutComponent }  from './User/user-Layout/user-Layout.component';
+import { UserFooterComponent }  from './User/user-Footer/user-Footer.component';
 import { UserSideBarComponent } from './User/user-Side-Bar/user-Side-Bar.component';
-import { CookieService } from 'ngx-cookie-service';
-import { AuthGuard } from './Guards/Auth-Guard.service';
+import { CookieService }        from 'ngx-cookie-service';
+import { AuthGuard }            from './Guards/Auth-Guard.service';
 
 import { JwtModule } from '@auth0/angular-jwt';
 
@@ -57,6 +58,7 @@ export function tokenGetter() {
     ContactsListComponent,
     GetGroupsComponent,
     ViewContactComponent,
+    ViewGroupComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -64,8 +66,8 @@ export function tokenGetter() {
     FormsModule,
     JwtModule.forRoot({
       config: {
-        tokenGetter: tokenGetter,
-        allowedDomains: ['localhost:44462'],
+        tokenGetter     : tokenGetter,
+        allowedDomains  : ['localhost:44462'],
         disallowedRoutes: [],
       },
     }),
@@ -80,8 +82,8 @@ export function tokenGetter() {
       // { path: 'Check-User', component: CheckUserComponent },
 
       {
-        path: 'User-Dashboard',
-        component: UserDashboardComponent,
+        path       : 'User-Dashboard',
+        component  : UserDashboardComponent,
         canActivate: [AuthGuard],
       },
 
@@ -91,34 +93,39 @@ export function tokenGetter() {
 
       // One layout for multiple components
       {
-        path: '',
-        component: UserLayoutComponent,
+        path       : '',
+        component  : UserLayoutComponent,
         canActivate: [AuthGuard],
-        children: [
+        children   : [
           {
-            path: 'User/Contact/Get-Contacts',
-            component: GetContactsComponent,
+            path       : 'User/Contact/Get-Contacts',
+            component  : GetContactsComponent,
             canActivate: [AuthGuard],
 
           },
           {
-            path: 'User/Contact/Create-Contact',
-            component: CreateContactComponent,
+            path       : 'User/Contact/Create-Contact',
+            component  : CreateContactComponent,
             canActivate: [AuthGuard],
           },
           {
-            path: 'User/Contact/View-Contact/:id',
-            component: ViewContactComponent,
+            path       : 'User/Contact/View-Contact/:id',
+            component  : ViewContactComponent,
             canActivate: [AuthGuard],
           },
           {
-            path: 'User/Contact/Contacts-List',
-            component: ContactsListComponent,
+            path       : 'User/Contact/Contacts-List',
+            component  : ContactsListComponent,
             canActivate: [AuthGuard],
           },
           {
-            path: 'User/Group/Get-Groups',
-            component: GetGroupsComponent,
+            path       : 'User/Group/Get-Groups',
+            component  : GetGroupsComponent,
+            canActivate: [AuthGuard],
+          },
+          {
+            path: 'User/Group/View-Group/:id',
+            component: ViewGroupComponent,
             canActivate: [AuthGuard],
           }
         ],
@@ -134,9 +141,9 @@ export function tokenGetter() {
     CookieService,
 
     {
-      provide: HTTP_INTERCEPTORS,
+      provide : HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true,
+      multi   : true,
     },
   ],
   bootstrap: [AppComponent],

@@ -1,7 +1,7 @@
 import { Component, OnInit }      from '@angular/core';
 import { ActivatedRoute }         from '@angular/router';
 import { ViewContactResponseDTO } from 'src/app/DTOs/Contact/ViewContactResponseDTO';
-import { ContactService }         from 'src/app/Services/Contact/Contact.service';
+import { ContactService } from 'src/app/Services/Contact/Contact.service';
 
 @Component({
   selector   : 'app-view-Contact',

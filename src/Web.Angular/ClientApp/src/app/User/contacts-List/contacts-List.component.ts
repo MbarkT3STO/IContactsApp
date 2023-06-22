@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router }            from '@angular/router';
 import { Contact }           from 'src/app/DTOs/Contact/Contact';
 import { ContactService }    from 'src/app/Services/Contact/Contact.service';
 import { StringUtilService } from 'src/app/Services/Helpers/Extensions/String/StringUtil.service';
@@ -10,14 +10,15 @@ import { StringUtilService } from 'src/app/Services/Helpers/Extensions/String/St
   styleUrls  : ['./contacts-List.component.css'],
 })
 export class ContactsListComponent implements OnInit {
-  originalContacts : Contact[] = [];
-  displayedContacts: Contact[] = [];
-  searchQuery      : string    = '';
+  originalContacts  : Contact[] = [];
+  displayedContacts: Contact[]  = [];
+  searchQuery      : string     = '';
+  groupId          : string     = '';
 
   constructor(
     private contactService: ContactService,
-    private stringUtil: StringUtilService,
-    private router: Router
+    private stringUtil    : StringUtilService,
+    private router        : Router
   ) {}
 
   ngOnInit() {

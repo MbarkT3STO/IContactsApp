@@ -10,6 +10,12 @@ public class Mapping : Profile
 {
     public Mapping()
     {
-        CreateMap<Group, GetGroupByIdQueryResultDTO>();
+        CreateMap<Group, GetGroupByIdQueryResultDTO>().ForMember(dest=> dest.Contacts, opt=>opt.MapFrom(src=>src.Contacts.Select(c=>new GetGroupByIdQueryResultDTO.Contact
+		{
+			Id = c.Id,
+			Name = c.Name,
+			Email = c.Email,
+			ImageUrl = c.ImageUrl
+		})));
     }
 }
