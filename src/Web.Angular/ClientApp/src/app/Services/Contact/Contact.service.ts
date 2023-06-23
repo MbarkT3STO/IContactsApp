@@ -1,10 +1,12 @@
-import { HttpClient }               from '@angular/common/http';
-import { Injectable }               from '@angular/core';
-import { Observable }               from 'rxjs';
-import { Contact }                  from 'src/app/DTOs/Contact/Contact';
-import { CreateContactRequestDTO }  from 'src/app/DTOs/Contact/CreateContactRequestDTO';
-import { CreateContactResponseDTO } from 'src/app/DTOs/Contact/CreateContactResponseDTO';
-import { ViewContactResponseDTO }   from 'src/app/DTOs/Contact/ViewContactResponseDTO';
+import { HttpClient }                    from '@angular/common/http';
+import { Injectable }                    from '@angular/core';
+import { Observable }                    from 'rxjs';
+import { Contact }                       from 'src/app/DTOs/Contact/Contact';
+import { CreateContactRequestDTO }       from 'src/app/DTOs/Contact/CreateContactRequestDTO';
+import { CreateContactResponseDTO }      from 'src/app/DTOs/Contact/CreateContactResponseDTO';
+import { GetContactsByGroupRequestDTO }  from 'src/app/DTOs/Contact/GetContactsByGroupRequestDTO';
+import { GetContactsByGroupResponseDTO } from 'src/app/DTOs/Contact/GetContactsByGroupResponseDTO';
+import { ViewContactResponseDTO }        from 'src/app/DTOs/Contact/ViewContactResponseDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -50,5 +52,14 @@ export class ContactService {
     request: FormData
     )      : Observable<CreateContactResponseDTO> {
     return this.http.post<CreateContactResponseDTO>(this.apiUrl, request);
+  }
+
+  /**
+   * Gets all contacts by group
+   * @param request The request object
+   * @returns The response object as an observable of type {@link GetContactsByGroupResponseDTO}
+   **/
+  public GetContactsByGroup(request: GetContactsByGroupRequestDTO): Observable<GetContactsByGroupResponseDTO>{
+    return this.http.post<GetContactsByGroupResponseDTO>(this.apiUrl + '/GetByGroup', request);
   }
 }

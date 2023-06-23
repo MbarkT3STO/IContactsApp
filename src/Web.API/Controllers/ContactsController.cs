@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Web.API.Exceptions;
 using Web.API.Features.ContactFeature.Commands.CreateContactCommand;
 using Web.API.Features.ContactFeature.Queries.GetContactByIdQuery;
+using Web.API.Features.ContactFeature.Queries.GetContactsByGroupQuery;
 using Web.API.Features.ContactFeature.Queries.GetContactsQuery;
 using Web.API.Shared;
 using static Web.API.Features.ContactFeature.Queries.GetContactsQuery.GetContactsQuery;
@@ -14,38 +15,46 @@ namespace Web.API;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ContactsController : ExtendedControllerBase
+public class ContactsController: ExtendedControllerBase
 {
-    public ContactsController(IMediator mediator) : base(mediator)
-    {
-    }
+	public ContactsController(IMediator mediator): base(mediator)
+	{
+	}
 
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<GetContactsQueryDTO>>> Get()
-    {
-        var contacts = await Send(new GetContactsQuery());
+	[HttpGet]
+	public async Task<ActionResult<IEnumerable<GetContactsQueryDTO>>> Get()
+	{
+		var contacts = await Send(new GetContactsQuery());
 
-        return Ok(contacts.Contacts);
-    }
+		return Ok(contacts.Contacts);
+	}
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<GetContactByIdQueryResultDTO>> Get(int id)
-    {
-        var result = await Send(new GetContactByIdQuery(id));
+	[HttpGet("{id}")]
+	public async Task<ActionResult<GetContactByIdQueryResultDTO>> Get(int id)
+	{
+		var result = await Send(new GetContactByIdQuery(id));
 
-        return Ok(result.Value);
-    }
+		return Ok(result.Value);
+	}
 
-    [HttpPost]
-    public async Task<ActionResult<CreateContactCommandResultDTO>> Post([FromForm] CreateContactCommand command, [FromForm] IFormFile? imageFile)
-    {
-        command.ImageFile = imageFile;
+	[HttpPost]
+	public async Task<ActionResult<CreateContactCommandResultDTO>> Post([FromForm] CreateContactCommand command, [FromForm] IFormFile? imageFile)
+	{
+		command.ImageFile = imageFile;
 
-        var result = await Send(command);
+		var result = await Send(command);
 
-        if (result.Exception is RecordAlreadyExistException)
-            return Conflict(result.Exception.Message);
+		if (result.Exception is RecordAlreadyExistException)
+			return Conflict(result.Exception.Message);
 
-        return Ok(result.Value);
-    }
+		return Ok(result.Value);
+	}
+
+	[HttpPost("GetByGroup")]
+	public async Task<ActionResult<GetContactsByGroupQueryResultDTO>> GetByGroup(GetContactsByGroupQuery query)
+	{
+		var result = await Send(query);
+
+		return Ok(result.Value);
+	}
 }

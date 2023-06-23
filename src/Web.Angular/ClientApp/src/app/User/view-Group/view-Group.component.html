@@ -1,3 +1,60 @@
-<p>
-  view-Group works!
-</p>
+
+              <!--begin::Content container-->
+              <div
+              id="kt_app_content_container"
+              class="app-container container-fluid"
+            >
+              <!--begin::Contacts App- Getting Started-->
+              <div class="row g-7">
+                <!--begin::Contact groups-->
+
+                <app-get-Groups class="col-lg-6 col-xl-3"></app-get-Groups>
+
+                <!--end::Contact groups-->
+
+                <app-contacts-List [isFromViewGroupComponent]="true" [contactsByGroup]="contacts" class="col-lg-6 col-xl-3"></app-contacts-List>
+
+
+                <!--begin::Content-->
+                <div class="col-xl-6">
+                  <!--begin::Card-->
+                  <div class="card card-flush h-lg-100" id="kt_contacts_main">
+                    <!--begin::Card body-->
+                    <div class="card-body p-0">
+                      <!--begin::Wrapper-->
+                      <div class="card-px text-center py-20 my-10">
+
+                        <!--begin::Description-->
+                        <p class="text-gray-400 fs-4 fw-semibold mb-10">
+                          It's time to expand our contacts. <br />Kickstart your
+                          contacts growth by adding a your next contact.
+                        </p>
+                        <!--end::Description-->
+                        <!--begin::Action-->
+                        <a
+                          [routerLink]="['/User/Contact/Create-Contact']"
+                          class="btn btn-primary"
+                          >Add New Contact</a
+                        >
+                        <!--end::Action-->
+                      </div>
+                      <!--end::Wrapper-->
+                      <!--begin::Illustration-->
+                      <div class="text-center px-4">
+                        <img
+                          class="mw-100 mh-300px"
+                          alt=""
+                          src="assets/media/illustrations/sketchy-1/5.png"
+                        />
+                      </div>
+                      <!--end::Illustration-->
+                    </div>
+                    <!--end::Card body-->
+                  </div>
+                  <!--end::Card-->
+                </div>
+                <!--end::Content-->
+              </div>
+              <!--end::Contacts App- Getting Started-->
+            </div>
+            <!--end::Content container-->
