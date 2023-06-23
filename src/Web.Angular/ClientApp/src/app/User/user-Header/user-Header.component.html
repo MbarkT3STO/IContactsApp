@@ -115,7 +115,7 @@
                 data-kt-menu-attach="parent"
                 data-kt-menu-placement="bottom-end"
               >
-                <img src="assets/media/avatars/300-9.jpg" alt="user" />
+                <img [src]="user.imageUrl ? 'https://localhost:7004/'+user.imageUrl : 'https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG.png'"  alt="user image" />
               </div>
               <!--begin::User account menu-->
               <div
@@ -133,16 +133,16 @@
                     <!--begin::Username-->
                     <div class="d-flex flex-column">
                       <div class="fw-bold d-flex align-items-center fs-5">
-                        Max Smith
+                        {{user.firstName}} {{user.lastName}}
                         <span
                           class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2"
-                          >Pro</span
+                          >user</span
                         >
                       </div>
                       <a
                         href="#"
                         class="fw-semibold text-muted text-hover-primary fs-7"
-                        >max@kt.com</a
+                        >{{user.email}}</a
                       >
                     </div>
                     <!--end::Username-->
@@ -641,10 +641,10 @@
               <a
                 href="../../demo8/dist/pages/user-profile/overview.html"
                 class="text-gray-800 text-hover-primary fs-4 fw-bold"
-                >Ja Morant</a
+                >{{user.firstName}} {{user.lastName}}</a
               >
               <span class="text-gray-400 fw-semibold d-block"
-                >UI/UX Design Lean</span
+                >User</span
               >
             </div>
             <!--end:Info-->
