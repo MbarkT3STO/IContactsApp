@@ -26,6 +26,7 @@ import { GetGroupsComponent } from './User/get-Groups/get-Groups.component';
 import { ViewGroupComponent } from './User/view-Group/view-Group.component';
 
 import { UserProfileComponent } from './User/user-Profile/user-Profile.component';
+import { UserSettingsComponent } from './User/User-Settings/User-Settings.component';
 
 import { UserHeaderComponent }  from './User/user-Header/user-Header.component';
 import { UserLayoutComponent }  from './User/user-Layout/user-Layout.component';
@@ -62,6 +63,7 @@ export function tokenGetter() {
     ViewContactComponent,
     ViewGroupComponent,
     UserProfileComponent,
+    UserSettingsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -134,6 +136,11 @@ export function tokenGetter() {
           {
             path: 'User/User-Profile',
             component: UserProfileComponent,
+            canActivate: [AuthGuard],
+          },
+          {
+            path: 'User/User-Settings',
+            component: UserSettingsComponent,
             canActivate: [AuthGuard],
           },
         ],

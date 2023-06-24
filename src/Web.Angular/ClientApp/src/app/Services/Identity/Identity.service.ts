@@ -3,6 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { AppUser } from '../../Models/Identity/AppUser';
 import { Observable } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
+import { UpdateEmailRequest } from 'src/app/DTOs/Identity/UpdateEmailRequest';
+import { UpdateEmailResponse } from 'src/app/DTOs/Identity/UpdateEmailResponse';
+import { UpdatePasswordRequest } from 'src/app/DTOs/Identity/UpdatePasswordRequest';
+import { UpdatePasswordResponse } from 'src/app/DTOs/Identity/UpdatePasswordResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -38,5 +42,13 @@ export class IdentityService {
       `${this.apiUrl}/IsUserInRole?id=${id}&role=${role}`,
       {}
     );
+  }
+
+  UpdateEmail(request: UpdateEmailRequest): Observable<UpdateEmailResponse> {
+    return this.http.post<UpdateEmailResponse>(`${this.apiUrl}/UpdateEmail`, request);
+  }
+
+  UpdatePassword(request: UpdatePasswordRequest): Observable<UpdatePasswordResponse>{
+    return this.http.post<UpdatePasswordResponse>(`${this.apiUrl}/UpdatePassword`, request);
   }
 }
