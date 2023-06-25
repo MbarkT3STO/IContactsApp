@@ -8,8 +8,11 @@ using Microsoft.Extensions.Options;
 using Web.API.Identity;
 using Web.API.Models.Identity.UpdateEmail;
 using Web.API.Models.Identity.UpdatePassword;
+using Web.API.Models.Identity.UpdateUser;
 using Web.API.Options;
 using Web.API.Shared;
+using System.IO;
+
 
 namespace Web.API.Controllers;
 
@@ -144,4 +147,75 @@ public class IdentityController: ExtendedControllerBase
 
 	}
 
+	[HttpPost("UpdateUser")]
+	public async Task<ActionResult<UpdateUserResponse>> UpdateUser([FromForm] UpdateUserRequest request, [FromForm] IFormFile? newImageFile)
+	{
+		var user = await _userManager.FindByNameAsync(request.UserName);
+
+		if (user == null)
+			return BadRequest(new UpdateUserResponse(errorMessage: $"User with username {request.UserName} not found"));
+
+		// Update the user info
+		user.FirstName   = request.NewFirstName;
+		user.LastName    = request.NewLastName;
+		user.PhoneNumber = request.NewPhoneNumber;
+
+		// Update the user image
+		var folderName = Path.Combine("Resources", "Images", "Users");
+		var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+		
+		// Check if the Resources/Images/Users folder exists
+		if (!Directory.Exists(pathToSave))
+			Directory.CreateDirectory(pathToSave);
+
+		if (newImageFile != null)
+		{
+			var fileName = Guid.NewGuid().ToString() + Path.GetExtension(newImageFile.FileName);
+			var fullPath = Path.Combine(pathToSave, fileName);
+			var dbPath   = Path.Combine(folderName, fileName);
+
+			using var stream = new FileStream(fullPath, FileMode.Create);
+			newImageFile.CopyTo(stream);
+			stream.Flush();
+			
+			var oldImageUrl = user.ImageUrl;
+						
+			// Update the user image
+			user.ImageUrl = dbPath;
+
+			// Delete the old image
+			if (oldImageUrl != null)
+			{
+				var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), oldImageUrl);
+				if (System.IO.File.Exists(oldImagePath))
+					System.IO.File.Delete(oldImagePath);
+			}
+		}
+		else if(request.RemoveImage)
+		{
+			var oldImageUrl = user.ImageUrl;
+			
+			// Update the user image
+			user.ImageUrl = null;
+
+			// Delete the old image
+			if (oldImageUrl != null)
+			{
+				var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), oldImageUrl);
+				if (System.IO.File.Exists(oldImagePath))
+					System.IO.File.Delete(oldImagePath);
+			}
+		}
+		
+
+		var result = await _userManager.UpdateAsync(user);
+
+		if (result.Succeeded)
+			return Ok(new UpdateUserResponse(isSucceeded: true));
+
+		else
+			return BadRequest(new UpdateUserResponse(errorMessage: result.Errors.First().Description));
+
+	}
 }
+

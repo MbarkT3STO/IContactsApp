@@ -7,6 +7,8 @@ import { UpdateEmailRequest } from 'src/app/DTOs/Identity/UpdateEmailRequest';
 import { UpdateEmailResponse } from 'src/app/DTOs/Identity/UpdateEmailResponse';
 import { UpdatePasswordRequest } from 'src/app/DTOs/Identity/UpdatePasswordRequest';
 import { UpdatePasswordResponse } from 'src/app/DTOs/Identity/UpdatePasswordResponse';
+import { UpdateUserRequest } from 'src/app/DTOs/Identity/UpdateUserRequest';
+import { UpdateUserResponse } from 'src/app/DTOs/Identity/UpdateUserResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -37,6 +39,7 @@ export class IdentityService {
     return this.http.post<string[]>(this.apiUrl + '/GetUserRoles', id);
   }
 
+
   IsUserInRole(id: string, role: string) {
     return this.http.post<boolean>(
       `${this.apiUrl}/IsUserInRole?id=${id}&role=${role}`,
@@ -44,11 +47,20 @@ export class IdentityService {
     );
   }
 
+
   UpdateEmail(request: UpdateEmailRequest): Observable<UpdateEmailResponse> {
     return this.http.post<UpdateEmailResponse>(`${this.apiUrl}/UpdateEmail`, request);
   }
 
   UpdatePassword(request: UpdatePasswordRequest): Observable<UpdatePasswordResponse>{
     return this.http.post<UpdatePasswordResponse>(`${this.apiUrl}/UpdatePassword`, request);
+  }
+
+  UpdateUser(request: UpdateUserRequest): Observable<UpdateUserResponse>{
+    return this.http.post<UpdateUserResponse>(`${this.apiUrl}/UpdateUser`, request);
+  }
+
+  UpdateUserFromForm(request: FormData): Observable<UpdateUserResponse>{
+    return this.http.post<UpdateUserResponse>(`${this.apiUrl}/UpdateUser`, request);
   }
 }
