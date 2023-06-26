@@ -6,6 +6,8 @@ import { CreateContactRequestDTO }       from 'src/app/DTOs/Contact/CreateContac
 import { CreateContactResponseDTO }      from 'src/app/DTOs/Contact/CreateContactResponseDTO';
 import { GetContactsByGroupRequestDTO }  from 'src/app/DTOs/Contact/GetContactsByGroupRequestDTO';
 import { GetContactsByGroupResponseDTO } from 'src/app/DTOs/Contact/GetContactsByGroupResponseDTO';
+import { UpdateContactRequest } from 'src/app/DTOs/Contact/UpdateContactRequest';
+import { UpdateContactResponse } from 'src/app/DTOs/Contact/UpdateContactResponse';
 import { ViewContactResponseDTO }        from 'src/app/DTOs/Contact/ViewContactResponseDTO';
 
 @Injectable({
@@ -61,5 +63,23 @@ export class ContactService {
    **/
   public GetContactsByGroup(request: GetContactsByGroupRequestDTO): Observable<GetContactsByGroupResponseDTO>{
     return this.http.post<GetContactsByGroupResponseDTO>(this.apiUrl + '/GetByGroup', request);
+  }
+
+  /**
+   * Updates a contact
+   * @param request The request object
+   * @returns The response object as an observable of type {@link UpdateContactResponse}
+   * */
+  public Update(request: UpdateContactRequest): Observable<UpdateContactResponse>{
+    return this.http.put<UpdateContactResponse>(this.apiUrl, request);
+  }
+
+  /**
+   * Updates a contact from a form data object (used for image file upload)
+   * @param request The request object
+   * @returns The response object as an observable of type {@link UpdateContactResponse}
+   * */
+  public UpdateFromForm(request: FormData): Observable<UpdateContactResponse>{
+    return this.http.put<UpdateContactResponse>(this.apiUrl, request);
   }
 }

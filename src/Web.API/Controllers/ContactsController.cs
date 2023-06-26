@@ -3,8 +3,10 @@ using System.IO;
 using System.Net.Http.Headers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using Web.API.Exceptions;
 using Web.API.Features.ContactFeature.Commands.CreateContactCommand;
+using Web.API.Features.ContactFeature.Commands.UpdateContactCommand;
 using Web.API.Features.ContactFeature.Queries.GetContactByIdQuery;
 using Web.API.Features.ContactFeature.Queries.GetContactsByGroupQuery;
 using Web.API.Features.ContactFeature.Queries.GetContactsQuery;
@@ -15,9 +17,9 @@ namespace Web.API;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ContactsController: ExtendedControllerBase
+public class ContactsController : ExtendedControllerBase
 {
-	public ContactsController(IMediator mediator): base(mediator)
+	public ContactsController(IMediator mediator) : base(mediator)
 	{
 	}
 
@@ -57,4 +59,25 @@ public class ContactsController: ExtendedControllerBase
 
 		return Ok(result.Value);
 	}
+
+
+	[HttpPut]
+	public async Task<ActionResult<UpdateContactCommandResultDTO>> Put([FromForm] UpdateContactCommand command, [FromForm] IFormFile? imageFile)
+	{
+		command.NewImageFile = imageFile;
+
+		var result = await Send(command);
+
+		if (result.Exception is RecordAlreadyExistException)
+			return Conflict(result.Exception.Message);
+
+		if (result.Exception is RecordIsNotExistException)
+			return NotFound(result.Exception.Message);
+			
+		if (result.HasException)
+			return BadRequest(result.Exception.Message);
+
+		return Ok(result.Value);
+	}
+
 }

@@ -44,75 +44,7 @@
           <!--end::Card title-->
           <!--begin::Card toolbar-->
           <div class="card-toolbar gap-3">
-            <!--begin::Chat-->
-            <button
-              class="btn btn-sm btn-light btn-active-light-primary"
-              data-kt-drawer-show="true"
-              data-kt-drawer-target="#kt_drawer_chat"
-            >
-              <!--begin::Svg Icon | path: icons/duotune/communication/com012.svg-->
-              <span class="svg-icon svg-icon-2">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    opacity="0.3"
-                    d="M20 3H4C2.89543 3 2 3.89543 2 5V16C2 17.1046 2.89543 18 4 18H4.5C5.05228 18 5.5 18.4477 5.5 19V21.5052C5.5 22.1441 6.21212 22.5253 6.74376 22.1708L11.4885 19.0077C12.4741 18.3506 13.6321 18 14.8167 18H20C21.1046 18 22 17.1046 22 16V5C22 3.89543 21.1046 3 20 3Z"
-                    fill="currentColor"
-                  />
-                  <rect
-                    x="6"
-                    y="12"
-                    width="7"
-                    height="2"
-                    rx="1"
-                    fill="currentColor"
-                  />
-                  <rect
-                    x="6"
-                    y="7"
-                    width="12"
-                    height="2"
-                    rx="1"
-                    fill="currentColor"
-                  />
-                </svg>
-              </span>
-              <!--end::Svg Icon-->Chat
-            </button>
-            <!--end::Chat-->
-            <!--begin::Chat-->
-            <a
-              href="../../demo8/dist/apps/inbox/reply.html"
-              class="btn btn-sm btn-light btn-active-light-primary"
-            >
-              <!--begin::Svg Icon | path: icons/duotune/communication/com007.svg-->
-              <span class="svg-icon svg-icon-2">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    opacity="0.3"
-                    d="M8 8C8 7.4 8.4 7 9 7H16V3C16 2.4 15.6 2 15 2H3C2.4 2 2 2.4 2 3V13C2 13.6 2.4 14 3 14H5V16.1C5 16.8 5.79999 17.1 6.29999 16.6L8 14.9V8Z"
-                    fill="currentColor"
-                  />
-                  <path
-                    d="M22 8V18C22 18.6 21.6 19 21 19H19V21.1C19 21.8 18.2 22.1 17.7 21.6L15 18.9H9C8.4 18.9 8 18.5 8 17.9V7.90002C8 7.30002 8.4 6.90002 9 6.90002H21C21.6 7.00002 22 7.4 22 8ZM19 11C19 10.4 18.6 10 18 10H12C11.4 10 11 10.4 11 11C11 11.6 11.4 12 12 12H18C18.6 12 19 11.6 19 11ZM17 15C17 14.4 16.6 14 16 14H12C11.4 14 11 14.4 11 15C11 15.6 11.4 16 12 16H16C16.6 16 17 15.6 17 15Z"
-                    fill="currentColor"
-                  />
-                </svg>
-              </span>
-              <!--end::Svg Icon-->Message</a
-            >
-            <!--end::Chat-->
+
             <!--begin::Action menu-->
             <a
               href="#"
@@ -165,7 +97,7 @@
               <!--begin::Menu item-->
               <div class="menu-item px-3">
                 <a
-                  href="../../demo8/dist/apps/contacts/edit-contact.html"
+                  [routerLink]="['/User/Contact/Edit-Contact/', contact.id]"
                   class="menu-link px-3"
                   >Edit</a
                 >

@@ -21,11 +21,12 @@ import { GetContactsComponent }   from './User/get-Contacts/get-Contacts.compone
 import { CreateContactComponent } from './User/create-Contact/create-Contact.component';
 import { ViewContactComponent }   from './User/view-Contact/view-Contact.component';
 import { ContactsListComponent }  from './User/contacts-List/contacts-List.component';
+import { EditContactComponent }   from './User/edit-Contact/edit-Contact.component';
 
 import { GetGroupsComponent } from './User/get-Groups/get-Groups.component';
 import { ViewGroupComponent } from './User/view-Group/view-Group.component';
 
-import { UserProfileComponent } from './User/user-Profile/user-Profile.component';
+import { UserProfileComponent }  from './User/user-Profile/user-Profile.component';
 import { UserSettingsComponent } from './User/User-Settings/User-Settings.component';
 
 import { UserHeaderComponent }  from './User/user-Header/user-Header.component';
@@ -59,6 +60,7 @@ export function tokenGetter() {
     UserFooterComponent,
     UserSideBarComponent,
     ContactsListComponent,
+    EditContactComponent,
     GetGroupsComponent,
     ViewContactComponent,
     ViewGroupComponent,
@@ -124,23 +126,28 @@ export function tokenGetter() {
             canActivate: [AuthGuard],
           },
           {
+            path       : 'User/Contact/Edit-Contact/:id',
+            component  : EditContactComponent,
+            canActivate: [AuthGuard],
+          },
+          {
             path       : 'User/Group/Get-Groups',
             component  : GetGroupsComponent,
             canActivate: [AuthGuard],
           },
           {
-            path: 'User/Group/View-Group/:id',
-            component: ViewGroupComponent,
+            path       : 'User/Group/View-Group/:id',
+            component  : ViewGroupComponent,
             canActivate: [AuthGuard],
           },
           {
-            path: 'User/User-Profile',
-            component: UserProfileComponent,
+            path       : 'User/User-Profile',
+            component  : UserProfileComponent,
             canActivate: [AuthGuard],
           },
           {
-            path: 'User/User-Settings',
-            component: UserSettingsComponent,
+            path       : 'User/User-Settings',
+            component  : UserSettingsComponent,
             canActivate: [AuthGuard],
           },
         ],
