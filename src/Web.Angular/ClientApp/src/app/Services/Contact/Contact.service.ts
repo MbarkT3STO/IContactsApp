@@ -1,14 +1,16 @@
-import { HttpClient }                    from '@angular/common/http';
-import { Injectable }                    from '@angular/core';
-import { Observable }                    from 'rxjs';
-import { Contact }                       from 'src/app/DTOs/Contact/Contact';
-import { CreateContactRequestDTO }       from 'src/app/DTOs/Contact/CreateContactRequestDTO';
-import { CreateContactResponseDTO }      from 'src/app/DTOs/Contact/CreateContactResponseDTO';
-import { GetContactsByGroupRequestDTO }  from 'src/app/DTOs/Contact/GetContactsByGroupRequestDTO';
-import { GetContactsByGroupResponseDTO } from 'src/app/DTOs/Contact/GetContactsByGroupResponseDTO';
-import { UpdateContactRequest } from 'src/app/DTOs/Contact/UpdateContactRequest';
-import { UpdateContactResponse } from 'src/app/DTOs/Contact/UpdateContactResponse';
-import { ViewContactResponseDTO }        from 'src/app/DTOs/Contact/ViewContactResponseDTO';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Injectable }                          from '@angular/core';
+import { Observable }                          from 'rxjs';
+import { Contact }                             from 'src/app/DTOs/Contact/Contact';
+import { CreateContactRequestDTO }             from 'src/app/DTOs/Contact/CreateContactRequestDTO';
+import { CreateContactResponseDTO }            from 'src/app/DTOs/Contact/CreateContactResponseDTO';
+import { DeleteContactRequest }                from 'src/app/DTOs/Contact/DeleteContactRequest';
+import { DeleteContactResponse }               from 'src/app/DTOs/Contact/DeleteContactResponse';
+import { GetContactsByGroupRequestDTO }        from 'src/app/DTOs/Contact/GetContactsByGroupRequestDTO';
+import { GetContactsByGroupResponseDTO }       from 'src/app/DTOs/Contact/GetContactsByGroupResponseDTO';
+import { UpdateContactRequest }                from 'src/app/DTOs/Contact/UpdateContactRequest';
+import { UpdateContactResponse }               from 'src/app/DTOs/Contact/UpdateContactResponse';
+import { ViewContactResponseDTO }              from 'src/app/DTOs/Contact/ViewContactResponseDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -81,5 +83,15 @@ export class ContactService {
    * */
   public UpdateFromForm(request: FormData): Observable<UpdateContactResponse>{
     return this.http.put<UpdateContactResponse>(this.apiUrl, request);
+  }
+
+  /**
+   * Deletes a contact
+   * @param id The id of the contact
+   * @returns The response object as an observable of type {@link DeleteContactResponse}
+   * */
+  public Delete(request: DeleteContactRequest): Observable<DeleteContactResponse> {
+
+    return this.http.delete<DeleteContactResponse>(this.apiUrl + '/Delete/' + request.id+ '/' + request.userId);
   }
 }

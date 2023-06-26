@@ -2,10 +2,12 @@
 using System.IO;
 using System.Net.Http.Headers;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using Web.API.Exceptions;
 using Web.API.Features.ContactFeature.Commands.CreateContactCommand;
+using Web.API.Features.ContactFeature.Commands.DeleteContactCommand;
 using Web.API.Features.ContactFeature.Commands.UpdateContactCommand;
 using Web.API.Features.ContactFeature.Queries.GetContactByIdQuery;
 using Web.API.Features.ContactFeature.Queries.GetContactsByGroupQuery;
@@ -17,6 +19,8 @@ namespace Web.API;
 
 [ApiController]
 [Route("api/[controller]")]
+
+[Authorize]
 public class ContactsController : ExtendedControllerBase
 {
 	public ContactsController(IMediator mediator) : base(mediator)
@@ -80,4 +84,18 @@ public class ContactsController : ExtendedControllerBase
 		return Ok(result.Value);
 	}
 
+	
+	[HttpDelete("Delete/{id}/{userId}")]
+	public async Task<ActionResult<DeleteContactCommandResultDTO>> Delete(int id, string userId)
+	{
+		var result = await Send(new DeleteContactCommand { Id = id, UserId = userId });
+
+		if (result.Exception is RecordIsNotExistException)
+			return NotFound(result.Exception.Message);
+		
+		if (result.HasException)
+			return BadRequest(result.Exception.Message);
+
+		return Ok(result.Value);
+	}
 }

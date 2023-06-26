@@ -88,11 +88,11 @@ export function tokenGetter() {
 
       // { path: 'Check-User', component: CheckUserComponent },
 
-      {
-        path       : 'User-Dashboard',
-        component  : UserDashboardComponent,
-        canActivate: [AuthGuard],
-      },
+      // {
+      //   path       : 'User-Dashboard',
+      //   component  : UserDashboardComponent,
+      //   canActivate: [AuthGuard],
+      // },
 
       // { path: 'User/Contact/Get-Contacts', component: GetContactsComponent, canActivate: [AuthGuard] },
       // { path: 'User/Contact/Get-Contacts', component: UserLayoutComponent, canActivate: [AuthGuard], children: [ {path: '', component: GetContactsComponent, canActivate: [AuthGuard]}] },
@@ -105,10 +105,14 @@ export function tokenGetter() {
         canActivate: [AuthGuard],
         children   : [
           {
+            path       : 'User-Dashboard',
+            component  : UserDashboardComponent,
+            canActivate: [AuthGuard],
+          },
+          {
             path       : 'User/Contact/Get-Contacts',
             component  : GetContactsComponent,
             canActivate: [AuthGuard],
-
           },
           {
             path       : 'User/Contact/Create-Contact',

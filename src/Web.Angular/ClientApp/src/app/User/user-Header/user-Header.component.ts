@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AppUser } from 'src/app/Models/Identity/AppUser';
 import { AuthService } from 'src/app/Services/Auth/Auth.service';
 import { IdentityService } from 'src/app/Services/Identity/Identity.service';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-user-Header',
@@ -21,6 +23,23 @@ export class UserHeaderComponent implements OnInit {
     });
 
 
+  }
+
+  logout() {
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will be logged out!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, logout!',
+      cancelButtonText: 'No, keep it'
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        this.authService.Logout();
+      }
+    });
   }
 
 }
